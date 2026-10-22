@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ChocoTi-Digital – E-Commerce oficial de Chocolates Para Ti. Chocolates artesanales desde Sucre, Bolivia. Envío nacional, pago QR y atención corporativa B2B." />
+  <meta name="theme-color" content="#2C1A1D" />
+  <title>ChocoTi-Digital | Chocolates Para Ti – Desde Sucre, Bolivia</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Iconos (Lucide via CDN) -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+  <!-- Hoja de estilos principal -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- =========================================================
+       HEADER / NAVEGACIÓN STICKY
+  ========================================================= -->
+  <header class="header" id="header" role="banner">
+    <div class="container header__inner">
+
+      <!-- Logo -->
+      <a href="#inicio" class="header__logo" aria-label="Inicio ChocoTi-Digital">
+        <div class="logo-icon" aria-hidden="true">🍫</div>
+        <div class="logo-text">
+          <span class="logo-brand">Chocolates Para Ti</span>
+          <span class="logo-badge">Desde Sucre, Bolivia</span>
+        </div>
+      </a>
+
+      <!-- Navegación principal -->
+      <nav class="nav" id="nav" role="navigation" aria-label="Navegación principal">
+        <ul class="nav__list" role="list">
+          <li><a class="nav__link" href="#inicio">Inicio</a></li>
+          <li><a class="nav__link" href="#catalogo">Catálogo</a></li>
+          <li><a class="nav__link" href="#beneficios">Beneficios</a></li>
+          <li><a class="nav__link" href="#corporativo">Portal Corporativo</a></li>
+          <li><a class="nav__link" href="#rastreo">Seguimiento</a></li>
+          <li><a class="nav__link" href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <!-- Acciones del header -->
+      <div class="header__actions">
+
+        <!-- Selector de moneda -->
+        <div class="currency-selector" aria-label="Selector de moneda">
+          <button class="currency-btn active" data-currency="BOB" aria-pressed="true">BOB</button>
+          <span class="currency-divider" aria-hidden="true">|</span>
+          <button class="currency-btn" data-currency="USD" aria-pressed="false">USD</button>
+        </div>
+
+        <!-- Carrito -->
+        <button class="cart-btn" id="cartBtn" aria-label="Abrir carrito de compras" aria-haspopup="true">
+          <i data-lucide="shopping-bag" aria-hidden="true"></i>
+          <span class="cart-count" id="cartCount" aria-live="polite">0</span>
+        </button>
+
+        <!-- Hamburguesa (mobile) -->
+        <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">
+          <span class="hamburger__bar"></span>
+          <span class="hamburger__bar"></span>
+          <span class="hamburger__bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Overlay del menú móvil -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+  <main id="inicio">
+
+    <!-- =========================================================
+         HERO SECTION
+    ========================================================= -->
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero__bg-shapes" aria-hidden="true">
+        <div class="shape shape--1"></div>
+        <div class="shape shape--2"></div>
+        <div class="shape shape--3"></div>
+      </div>
+
+      <div class="container hero__grid">
+
+        <!-- Contenido textual -->
+        <div class="hero__content" data-animate="fade-up">
+          <span class="hero__eyebrow">🇧🇴 Plataforma E-Commerce Oficial</span>
+          <h1 class="hero__title" id="heroTitle">
+            El sabor tradicional de Sucre,<br/>
+            <em>directo a tu hogar u oficina</em>
+          </h1>
+          <p class="hero__subtitle">
+            Disfruta de nuestros chocolates artesanales, bombones finos y regalos corporativos
+            con <strong>envío nacional garantizado</strong> y pago instantáneo por
+            <strong>QR Simple</strong>.
+          </p>
+
+          <!-- CTA Botones -->
+          <div class="hero__ctas">
+            <a href="#catalogo" class="btn btn--primary btn--lg">
+              <i data-lucide="grid" aria-hidden="true"></i>
+              Explorar Catálogo Digital
+            </a>
+            <a href="#corporativo" class="btn btn--outline-gold btn--lg">
+              <i data-lucide="briefcase" aria-hidden="true"></i>
+              Solicitar Cotización Corporativa
+            </a>
+          </div>
+
+          <!-- Trust badges -->
+          <div class="hero__trust">
+            <div class="trust-badge">
+              <i data-lucide="shield-check" aria-hidden="true"></i>
+              <span>Frescura garantizada</span>
+            </div>
+            <div class="trust-badge">
+              <i data-lucide="qr-code" aria-hidden="true"></i>
+              <span>Pago QR Simple</span>
+            </div>
+            <div class="trust-badge">
+              <i data-lucide="map-pin" aria-hidden="true"></i>
+              <span>Directo de fábrica</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase visual de productos hero -->
+        <div class="hero__showcase" data-animate="fade-left" aria-label="Productos destacados">
+          <div class="showcase-grid">
+            <article class="showcase-card showcase-card--featured" aria-label="Bombones Artesanales">
+              <div class="showcase-card__emoji" aria-hidden="true">🍬</div>
+              <h3>Bombones Artesanales</h3>
+              <p>Rellenos exquisitos elaborados a mano</p>
+              <span class="showcase-card__price">Desde Bs. 45</span>
+            </article>
+            <article class="showcase-card" aria-label="Tabletas Premium">
+              <div class="showcase-card__emoji" aria-hidden="true">🍫</div>
+              <h3>Tabletas Premium</h3>
+              <p>Cacao fino de origen boliviano</p>
+              <span class="showcase-card__price">Desde Bs. 28</span>
+            </article>
+            <article class="showcase-card" aria-label="Cajas de Regalo">
+              <div class="showcase-card__emoji" aria-hidden="true">🎁</div>
+              <h3>Cajas de Regalo</h3>
+              <p>Presentación elegante para toda ocasión</p>
+              <span class="showcase-card__price">Desde Bs. 120</span>
+            </article>
+            <article class="showcase-card showcase-card--accent" aria-label="Edición Especial">
+              <div class="showcase-card__emoji" aria-hidden="true">✨</div>
+              <h3>Edición Especial</h3>
+              <p>Colecciones de temporada exclusivas</p>
+              <span class="showcase-card__price">Desde Bs. 180</span>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="hero__scroll-indicator" aria-hidden="true">
+        <div class="scroll-dot"></div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN: MÓDULOS / CARACTERÍSTICAS DE LA PLATAFORMA
+    ========================================================= -->
+    <section class="features" id="caracteristicas" aria-labelledby="featuresTitle">
+      <div class="container">
+        <header class="section-header" data-animate="fade-up">
+          <span class="section-eyebrow">Plataforma ChocoTi-Digital</span>
+          <h2 class="section-title" id="featuresTitle">Todo lo que necesitas, en un solo lugar</h2>
+          <p class="section-subtitle">Tecnología al servicio del mejor chocolate boliviano</p>
+        </header>
+
+        <div class="features__grid">
+
+          <!-- Característica 1: Catálogo -->
+          <article class="feature-card" data-animate="fade-up" data-delay="0">
+            <div class="feature-card__icon" aria-hidden="true">
+              <i data-lucide="layout-grid"></i>
+            </div>
+            <h3 class="feature-card__title">Catálogo Digital Interactivo</h3>
+            <p class="feature-card__desc">
+              Explora categorías claras: Bombones Artesanales, Tabletas/Barras, Regalos
+              Corporativos y Ediciones Especiales, con fotos de alta calidad y descripciones detalladas.
+            </p>
+            <ul class="feature-card__list" role="list">
+              <li><i data-lucide="check" aria-hidden="true"></i> Filtros por categoría y precio</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Descripciones de ingredientes</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Stock en tiempo real</li>
+            </ul>
+          </article>
+
+          <!-- Característica 2: QR -->
+          <article class="feature-card" data-animate="fade-up" data-delay="100">
+            <div class="feature-card__icon feature-card__icon--gold" aria-hidden="true">
+              <i data-lucide="qr-code"></i>
+            </div>
+            <h3 class="feature-card__title">Pagos Instantáneos con QR Simple</h3>
+            <p class="feature-card__desc">
+              Cobros inmediatos mediante banca móvil boliviana. Compatible con BNB, BCP,
+              Banco Mercantil y más. Validación automática en segundos, sin filas ni demoras.
+            </p>
+            <ul class="feature-card__list" role="list">
+              <li><i data-lucide="check" aria-hidden="true"></i> Compatible con todos los bancos BOL</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Confirmación instantánea</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Recibo digital automático</li>
+            </ul>
+          </article>
+
+          <!-- Característica 3: Tracking -->
+          <article class="feature-card" data-animate="fade-up" data-delay="200">
+            <div class="feature-card__icon" aria-hidden="true">
+              <i data-lucide="map-pin"></i>
+            </div>
+            <h3 class="feature-card__title">Tracking Nacional en Tiempo Real</h3>
+            <p class="feature-card__desc">
+              Seguimiento continuo del estado de tu envío desde la planta de Sucre hasta
+              la puerta de tu destino en cualquier ciudad de Bolivia.
+            </p>
+            <ul class="feature-card__list" role="list">
+              <li><i data-lucide="check" aria-hidden="true"></i> Actualización en tiempo real</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Notificación por WhatsApp/SMS</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Estimado de entrega preciso</li>
+            </ul>
+          </article>
+
+          <!-- Característica 4: Frescura -->
+          <article class="feature-card" data-animate="fade-up" data-delay="300">
+            <div class="feature-card__icon feature-card__icon--cream" aria-hidden="true">
+              <i data-lucide="award"></i>
+            </div>
+            <h3 class="feature-card__title">Garantía de Frescura de Fábrica</h3>
+            <p class="feature-card__desc">
+              Despacho directo sin intermediarios. Cada caja sale de nuestra planta central
+              en Sucre garantizando la calidad original de nuestra repostería fina.
+            </p>
+            <ul class="feature-card__list" role="list">
+              <li><i data-lucide="check" aria-hidden="true"></i> Sin intermediarios</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Empaque térmico premium</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Certificado de calidad</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN: BENEFICIOS (¿POR QUÉ ELEGIR CHOCOTI-DIGITAL?)
+    ========================================================= -->
+    <section class="benefits" id="beneficios" aria-labelledby="benefitsTitle">
+      <div class="container">
+        <header class="section-header" data-animate="fade-up">
+          <span class="section-eyebrow">¿Por qué elegirnos?</span>
+          <h2 class="section-title" id="benefitsTitle">La experiencia ChocoTi-Digital</h2>
+          <p class="section-subtitle">Diseñada pensando en ti y en tu empresa</p>
+        </header>
+
+        <div class="benefits__layout">
+
+          <!-- Tarjetas de beneficios -->
+          <div class="benefits__cards">
+
+            <article class="benefit-card" data-animate="fade-right">
+              <div class="benefit-card__number" aria-hidden="true">01</div>
+              <div class="benefit-card__content">
+                <div class="benefit-card__icon" aria-hidden="true">🌍</div>
+                <h3>Comodidad sin fronteras</h3>
+                <p>Compra desde cualquier ciudad de Bolivia o el exterior para sorprender a tus seres queridos con el auténtico sabor sucrense. Enviamos a toda Bolivia y también al exterior.</p>
+              </div>
+            </article>
+
+            <article class="benefit-card" data-animate="fade-right" style="--delay: 0.1s">
+              <div class="benefit-card__number" aria-hidden="true">02</div>
+              <div class="benefit-card__content">
+                <div class="benefit-card__icon" aria-hidden="true">🏢</div>
+                <h3>Atención B2B a medida</h3>
+                <p>Cotizaciones ágiles por volumen, personalización de empaques con tu logo empresarial y emisión de factura con NIT. Tu empresa merece el mejor chocolate.</p>
+              </div>
+            </article>
+
+            <article class="benefit-card" data-animate="fade-right" style="--delay: 0.2s">
+              <div class="benefit-card__number" aria-hidden="true">03</div>
+              <div class="benefit-card__content">
+                <div class="benefit-card__icon" aria-hidden="true">🔄</div>
+                <h3>Omnicanalidad fluida</h3>
+                <p>Sincronización en tiempo real entre nuestras agencias nacionales y la tienda digital. Tu pedido siempre actualizado, sin importar desde dónde compres.</p>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Stats visuales -->
+          <aside class="benefits__stats" data-animate="fade-left" aria-label="Estadísticas de la empresa">
+            <div class="stat-card">
+              <div class="stat-card__value" data-count="15">0</div>
+              <div class="stat-card__label">Años de tradición chocolatera</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__value" data-count="50">0</div>
+              <div class="stat-card__label">Variedades de productos</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__value" data-count="9">0</div>
+              <div class="stat-card__label">Ciudades con despacho</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__value" data-count="5000">0</div>
+              <div class="stat-card__label">Clientes satisfechos</div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN: CATÁLOGO / SHOWCASE DE PRODUCTOS
+    ========================================================= -->
+    <section class="catalog" id="catalogo" aria-labelledby="catalogTitle">
+      <div class="container">
+        <header class="section-header" data-animate="fade-up">
+          <span class="section-eyebrow">Catálogo Digital</span>
+          <h2 class="section-title" id="catalogTitle">Nuestros Productos Estrella</h2>
+          <p class="section-subtitle">Elaborados con cacao fino y tradición boliviana</p>
+        </header>
+
+        <!-- Tabs de filtrado -->
+        <div class="catalog__tabs" role="tablist" aria-label="Filtros de categoría" data-animate="fade-up">
+          <button class="tab-btn active" role="tab" data-filter="all" aria-selected="true" aria-controls="productGrid">Todos</button>
+          <button class="tab-btn" role="tab" data-filter="bombones" aria-selected="false" aria-controls="productGrid">Bombones</button>
+          <button class="tab-btn" role="tab" data-filter="tabletas" aria-selected="false" aria-controls="productGrid">Tabletas</button>
+          <button class="tab-btn" role="tab" data-filter="regalos" aria-selected="false" aria-controls="productGrid">Regalos Empresariales</button>
+          <button class="tab-btn" role="tab" data-filter="especiales" aria-selected="false" aria-controls="productGrid">Edición Especial</button>
+        </div>
+
+        <!-- Grid de productos -->
+        <div class="products-grid" id="productGrid" role="tabpanel" aria-live="polite">
+
+          <!-- Producto 1 -->
+          <article class="product-card" data-category="bombones" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">🍬</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Bombones Artesanales</span>
+              <h3 class="product-card__name">Bombones de Maracuyá</h3>
+              <p class="product-card__desc">Relleno tropical con cobertura de chocolate oscuro 70% cacao. Caja x 12 unidades.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="85" data-price-usd="12.20">Bs. 85</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Bombones de Maracuyá" data-price="85" aria-label="Añadir Bombones de Maracuyá al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 2 -->
+          <article class="product-card" data-category="bombones" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">🍫</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Bombones Artesanales</span>
+              <h3 class="product-card__name">Bombones de Almendra</h3>
+              <p class="product-card__desc">Almendras enteras bañadas en chocolate con leche premium. Caja x 12 unidades.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="90" data-price-usd="13">Bs. 90</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Bombones de Almendra" data-price="90" aria-label="Añadir Bombones de Almendra al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 3 -->
+          <article class="product-card" data-category="tabletas" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">🍫</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Tabletas Premium</span>
+              <h3 class="product-card__name">Tableta Oscura 70%</h3>
+              <p class="product-card__desc">Chocolate negro de alta intensidad con cacao boliviano de origen. Barra 100g.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="35" data-price-usd="5">Bs. 35</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Tableta Oscura 70%" data-price="35" aria-label="Añadir Tableta Oscura 70% al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 4 -->
+          <article class="product-card" data-category="tabletas" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">🍫</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Tabletas Premium</span>
+              <h3 class="product-card__name">Tableta Leche & Caramelo</h3>
+              <p class="product-card__desc">Suave chocolate con leche y caramelo artesanal. Una combinación irresistible. 100g.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="32" data-price-usd="4.60">Bs. 32</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Tableta Leche & Caramelo" data-price="32" aria-label="Añadir Tableta Leche y Caramelo al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 5 -->
+          <article class="product-card" data-category="regalos" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">🎁</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Regalos Empresariales</span>
+              <h3 class="product-card__name">Kit Corporativo Premium</h3>
+              <p class="product-card__desc">Selección de bombones y tabletas en caja personalizable con logo. Ideal para regalos institucionales.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="250" data-price-usd="36">Bs. 250</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Kit Corporativo Premium" data-price="250" aria-label="Añadir Kit Corporativo Premium al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 6 -->
+          <article class="product-card" data-category="regalos" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">🎀</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Regalos Empresariales</span>
+              <h3 class="product-card__name">Canasta Navideña Institucional</h3>
+              <p class="product-card__desc">Gran canasta con variedad de productos con empaque navideño personalizado y factura NIT.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="480" data-price-usd="69">Bs. 480</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Canasta Navideña Institucional" data-price="480" aria-label="Añadir Canasta Navideña al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 7 -->
+          <article class="product-card" data-category="especiales" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">✨</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Edición Especial</span>
+              <h3 class="product-card__name">Colección San Valentín</h3>
+              <p class="product-card__desc">Bombones en forma de corazón con rellenos de champagne y fresa. Edición limitada.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="195" data-price-usd="28">Bs. 195</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Colección San Valentín" data-price="195" aria-label="Añadir Colección San Valentín al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 8 -->
+          <article class="product-card" data-category="especiales" data-animate="fade-up">
+            <div class="product-card__image" aria-hidden="true">🌟</div>
+            <div class="product-card__body">
+              <span class="product-card__category">Edición Especial</span>
+              <h3 class="product-card__name">Caja Aniversario Sucre</h3>
+              <p class="product-card__desc">Colección conmemorativa con chocolates inspirados en los sabores e íconos de Sucre.</p>
+              <div class="product-card__footer">
+                <div class="product-card__pricing">
+                  <span class="product-card__price" data-price-bob="320" data-price-usd="46">Bs. 320</span>
+                </div>
+                <button class="btn btn--primary btn--sm add-to-cart" data-name="Caja Aniversario Sucre" data-price="320" aria-label="Añadir Caja Aniversario Sucre al carrito">
+                  <i data-lucide="shopping-bag" aria-hidden="true"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div><!-- /products-grid -->
+
+        <!-- CTA del catálogo -->
+        <div class="catalog__cta" data-animate="fade-up">
+          <a href="#corporativo" class="btn btn--outline-dark btn--lg">
+            <i data-lucide="package" aria-hidden="true"></i>
+            Ver catálogo completo y solicitar lote mayorista
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN: PORTAL CORPORATIVO B2B
+    ========================================================= -->
+    <section class="corporate" id="corporativo" aria-labelledby="corporateTitle">
+      <div class="container">
+        <div class="corporate__layout">
+
+          <!-- Info B2B -->
+          <div class="corporate__info" data-animate="fade-right">
+            <span class="section-eyebrow section-eyebrow--light">Portal Corporativo B2B</span>
+            <h2 class="section-title section-title--light" id="corporateTitle">
+              Soluciones de Regalística Institucional y Navideña
+            </h2>
+            <p class="corporate__desc">
+              Diseñamos y preparamos experiencias chocolateras únicas para tu empresa.
+              Personalizamos empaques con tu identidad de marca, emitimos factura con NIT
+              y coordinamos entregas masivas en toda Bolivia.
+            </p>
+            <ul class="corporate__benefits" role="list">
+              <li>
+                <i data-lucide="check-circle" aria-hidden="true"></i>
+                <span>Pedidos desde 50 unidades con descuento por volumen</span>
+              </li>
+              <li>
+                <i data-lucide="check-circle" aria-hidden="true"></i>
+                <span>Empaque personalizado con tu logo y colores corporativos</span>
+              </li>
+              <li>
+                <i data-lucide="check-circle" aria-hidden="true"></i>
+                <span>Factura fiscal con NIT para gastos deducibles</span>
+              </li>
+              <li>
+                <i data-lucide="check-circle" aria-hidden="true"></i>
+                <span>Cotización en menos de 24 horas hábiles</span>
+              </li>
+              <li>
+                <i data-lucide="check-circle" aria-hidden="true"></i>
+                <span>Despacho coordinado a toda Bolivia y el exterior</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Formulario de cotización B2B -->
+          <div class="corporate__form" data-animate="fade-left">
+            <form class="form" id="b2bForm" novalidate aria-label="Formulario de cotización corporativa">
+              <h3 class="form__title">Solicita tu Cotización Gratuita</h3>
+
+              <div class="form__row">
+                <div class="form__group">
+                  <label class="form__label" for="companyName">Nombre de la empresa *</label>
+                  <input class="form__input" type="text" id="companyName" name="companyName"
+                         placeholder="Ej: Empresa ABC S.R.L." required autocomplete="organization" />
+                  <span class="form__error" role="alert" id="companyNameError"></span>
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="nit">NIT de la empresa *</label>
+                  <input class="form__input" type="text" id="nit" name="nit"
+                         placeholder="Ej: 123456789" required />
+                  <span class="form__error" role="alert" id="nitError"></span>
+                </div>
+              </div>
+
+              <div class="form__row">
+                <div class="form__group">
+                  <label class="form__label" for="quantity">Cantidad estimada de unidades *</label>
+                  <input class="form__input" type="number" id="quantity" name="quantity"
+                         placeholder="Mín. 50 unidades" min="50" required />
+                  <span class="form__error" role="alert" id="quantityError"></span>
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="packagingType">Tipo de empaque personalizado</label>
+                  <select class="form__input" id="packagingType" name="packagingType">
+                    <option value="">Selecciona una opción</option>
+                    <option value="caja-logo">Caja con logo impreso</option>
+                    <option value="cinta">Cinta y lazo personalizados</option>
+                    <option value="bolsa-kraft">Bolsa kraft con sticker</option>
+                    <option value="caja-premium">Caja premium con tarjeta</option>
+                    <option value="personalizado">Diseño totalmente personalizado</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form__group">
+                <label class="form__label" for="deliveryDate">Fecha de entrega requerida *</label>
+                <input class="form__input" type="date" id="deliveryDate" name="deliveryDate" required />
+                <span class="form__error" role="alert" id="deliveryDateError"></span>
+              </div>
+
+              <div class="form__group">
+                <label class="form__label" for="b2bNotes">Detalles adicionales o mensaje</label>
+                <textarea class="form__input form__textarea" id="b2bNotes" name="b2bNotes"
+                          placeholder="Indícanos productos de interés, ciudades de entrega, etc."
+                          rows="3"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn--gold btn--full">
+                <i data-lucide="send" aria-hidden="true"></i>
+                Enviar Solicitud de Cotización
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN: RASTREO RÁPIDO DE PEDIDOS
+    ========================================================= -->
+    <section class="tracking" id="rastreo" aria-labelledby="trackingTitle">
+      <div class="container">
+        <header class="section-header" data-animate="fade-up">
+          <span class="section-eyebrow">Seguimiento de pedidos</span>
+          <h2 class="section-title" id="trackingTitle">Rastrea tu Pedido en Tiempo Real</h2>
+          <p class="section-subtitle">Ingresa tu número de guía y conoce el estado de tu envío desde Sucre</p>
+        </header>
+
+        <div class="tracking__widget" data-animate="fade-up">
+          <form class="tracking__form" id="trackingForm" novalidate aria-label="Formulario de rastreo de pedido">
+            <div class="tracking__input-group">
+              <label class="visually-hidden" for="trackingNumber">Número de guía o seguimiento</label>
+              <input
+                class="tracking__input"
+                type="text"
+                id="trackingNumber"
+                name="trackingNumber"
+                placeholder="Ej: CHT-2026-001234"
+                autocomplete="off"
+                required
+                aria-required="true"
+              />
+              <button class="btn btn--primary tracking__submit" type="submit" aria-label="Rastrear pedido">
+                <i data-lucide="search" aria-hidden="true"></i>
+                Rastrear
+              </button>
+            </div>
+          </form>
+
+          <!-- Resultado del rastreo (oculto hasta búsqueda) -->
+          <div class="tracking__result" id="trackingResult" aria-live="polite" hidden>
+            <div class="tracking__result-header">
+              <div class="tracking__result-id">Pedido: <strong id="trackResultId"></strong></div>
+              <div class="tracking__result-status" id="trackResultStatus"></div>
+            </div>
+            <div class="tracking__timeline" id="trackTimeline" role="list">
+              <!-- Los pasos se inyectan dinámicamente por JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN: CONTACTO + FOOTER
+    ========================================================= -->
+    <section class="contact" id="contacto" aria-labelledby="contactTitle">
+      <div class="container">
+        <header class="section-header" data-animate="fade-up">
+          <span class="section-eyebrow">Estamos aquí para ti</span>
+          <h2 class="section-title" id="contactTitle">Contáctanos</h2>
+          <p class="section-subtitle">Nuestro equipo responde en menos de 2 horas hábiles</p>
+        </header>
+
+        <div class="contact__layout">
+
+          <!-- Formulario general -->
+          <div class="contact__form" data-animate="fade-right">
+            <form class="form" id="contactForm" novalidate aria-label="Formulario de contacto general">
+              <div class="form__row">
+                <div class="form__group">
+                  <label class="form__label" for="contactName">Nombre completo *</label>
+                  <input class="form__input" type="text" id="contactName" name="contactName"
+                         placeholder="Tu nombre" required autocomplete="name" />
+                  <span class="form__error" role="alert" id="contactNameError"></span>
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="contactEmail">Correo electrónico *</label>
+                  <input class="form__input" type="email" id="contactEmail" name="contactEmail"
+                         placeholder="tu@correo.com" required autocomplete="email" />
+                  <span class="form__error" role="alert" id="contactEmailError"></span>
+                </div>
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="contactCity">Ciudad</label>
+                <select class="form__input" id="contactCity" name="contactCity" autocomplete="address-level2">
+                  <option value="">Selecciona tu ciudad</option>
+                  <option value="sucre">Sucre</option>
+                  <option value="lapaz">La Paz</option>
+                  <option value="cbba">Cochabamba</option>
+                  <option value="scz">Santa Cruz</option>
+                  <option value="oruro">Oruro</option>
+                  <option value="potosi">Potosí</option>
+                  <option value="trinidad">Trinidad</option>
+                  <option value="cobija">Cobija</option>
+                  <option value="exterior">Exterior</option>
+                  <option value="otro">Otra ciudad</option>
+                </select>
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="contactMessage">Mensaje *</label>
+                <textarea class="form__input form__textarea" id="contactMessage" name="contactMessage"
+                          placeholder="¿En qué podemos ayudarte?" required rows="5"></textarea>
+                <span class="form__error" role="alert" id="contactMessageError"></span>
+              </div>
+              <button type="submit" class="btn btn--primary btn--full">
+                <i data-lucide="send" aria-hidden="true"></i>
+                Enviar Mensaje
+              </button>
+            </form>
+          </div>
+
+          <!-- Info de contacto -->
+          <aside class="contact__info" data-animate="fade-left" aria-label="Información de contacto">
+            <div class="contact-info-card">
+              <h3 class="contact-info-card__title">🏭 Planta Central – Sucre</h3>
+              <ul class="contact-info-card__list" role="list">
+                <li>
+                  <i data-lucide="map-pin" aria-hidden="true"></i>
+                  <span>Av. Los Jazmines #456, Zona Norte, Sucre, Bolivia</span>
+                </li>
+                <li>
+                  <i data-lucide="phone" aria-hidden="true"></i>
+                  <a href="tel:+59164000000">+591 64 000 000</a>
+                </li>
+                <li>
+                  <i data-lucide="message-circle" aria-hidden="true"></i>
+                  <a href="https://wa.me/59164000000" target="_blank" rel="noopener noreferrer">WhatsApp directo</a>
+                </li>
+                <li>
+                  <i data-lucide="mail" aria-hidden="true"></i>
+                  <a href="mailto:ventas@chocolatesti.bo">ventas@chocolatesti.bo</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Presencia nacional -->
+            <div class="contact-info-card contact-info-card--agencies">
+              <h3 class="contact-info-card__title">📍 Agencias Nacionales</h3>
+              <div class="agencies-grid" role="list">
+                <div class="agency-item" role="listitem">
+                  <span class="agency-dot" aria-hidden="true"></span>
+                  <span>Sucre <em>(Planta Central)</em></span>
+                </div>
+                <div class="agency-item" role="listitem">
+                  <span class="agency-dot" aria-hidden="true"></span>
+                  <span>La Paz</span>
+                </div>
+                <div class="agency-item" role="listitem">
+                  <span class="agency-dot" aria-hidden="true"></span>
+                  <span>Cochabamba</span>
+                </div>
+                <div class="agency-item" role="listitem">
+                  <span class="agency-dot" aria-hidden="true"></span>
+                  <span>Santa Cruz</span>
+                </div>
+                <div class="agency-item" role="listitem">
+                  <span class="agency-dot" aria-hidden="true"></span>
+                  <span>Oruro</span>
+                </div>
+                <div class="agency-item" role="listitem">
+                  <span class="agency-dot" aria-hidden="true"></span>
+                  <span>Potosí</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Métodos de pago -->
+            <div class="contact-info-card">
+              <h3 class="contact-info-card__title">💳 Métodos de Pago Aceptados</h3>
+              <div class="payment-methods" role="list">
+                <div class="payment-badge" role="listitem">📱 QR Simple</div>
+                <div class="payment-badge" role="listitem">💳 Tarjetas Enlace</div>
+                <div class="payment-badge" role="listitem">🏦 Transferencia</div>
+                <div class="payment-badge" role="listitem">💳 ATC Bolivia</div>
+              </div>
+            </div>
+
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <div class="logo-icon logo-icon--sm" aria-hidden="true">🍫</div>
+        <div>
+          <span class="logo-brand logo-brand--light">Chocolates Para Ti</span>
+          <span class="logo-badge logo-badge--light">ChocoTi-Digital © 2026</span>
+        </div>
+      </div>
+
+      <!-- Redes sociales -->
+      <nav class="footer__social" aria-label="Redes sociales">
+        <a href="#" class="social-link" aria-label="Facebook de Chocolates Para Ti" rel="noopener noreferrer">
+          <i data-lucide="facebook" aria-hidden="true"></i>
+        </a>
+        <a href="#" class="social-link" aria-label="Instagram de Chocolates Para Ti" rel="noopener noreferrer">
+          <i data-lucide="instagram" aria-hidden="true"></i>
+        </a>
+        <a href="#" class="social-link" aria-label="TikTok de Chocolates Para Ti" rel="noopener noreferrer">
+          <i data-lucide="video" aria-hidden="true"></i>
+        </a>
+        <a href="https://wa.me/59164000000" class="social-link" aria-label="WhatsApp de Chocolates Para Ti" rel="noopener noreferrer" target="_blank">
+          <i data-lucide="message-circle" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+      <p class="footer__copy">
+        Todos los derechos reservados. Elaborado con ❤️ y cacao fino boliviano en Sucre, Bolivia.
+      </p>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       MODAL DEL CARRITO
+  ========================================================= -->
+  <div class="modal-overlay" id="cartModal" role="dialog" aria-modal="true" aria-label="Carrito de compras" hidden>
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">🛒 Tu Carrito</h2>
+        <button class="modal__close" id="cartModalClose" aria-label="Cerrar carrito">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal__body" id="cartItems">
+        <p class="cart-empty" id="cartEmpty">Tu carrito está vacío 🍫</p>
+      </div>
+      <div class="modal__footer" id="cartFooter" hidden>
+        <div class="cart-total">
+          Total: <strong id="cartTotal">Bs. 0</strong>
+        </div>
+        <button class="btn btn--primary btn--full" id="checkoutBtn">
+          <i data-lucide="qr-code" aria-hidden="true"></i>
+          Proceder al Pago con QR
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       TOAST NOTIFICATIONS
+  ========================================================= -->
+  <div class="toast-container" id="toastContainer" aria-live="assertive" aria-atomic="true" role="status"></div>
+
+  <!-- Script principal -->
+  <script src="script.js"></script>
+</body>
+</html>
