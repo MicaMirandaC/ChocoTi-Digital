@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Administrador | ChocoTi-Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../shared/css/dashboard.css"/>
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- ══════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════ -->
+  <aside class="sidebar" role="navigation" aria-label="Menú principal">
+
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-icon" aria-hidden="true">🍫</span>
+      <div class="sidebar__logo-text">
+        <span class="sidebar__brand">Chocolates Para Ti</span>
+        <span class="sidebar__sub">ChocoTi-Digital</span>
+      </div>
+    </div>
+
+    <div class="sidebar__role-badge role-admin" data-auth="sidebar-role-badge">ADMINISTRADOR</div>
+
+    <nav class="sidebar__nav">
+      <span class="sidebar__section-label">Principal</span>
+      <div class="nav-item active" data-nav="sec-inicio" aria-current="page">
+        <span class="nav-icon">🏠</span> Inicio / Resumen
+      </div>
+      <div class="nav-item" data-nav="sec-usuarios">
+        <span class="nav-icon">👥</span> Gestión de Usuarios
+      </div>
+      <div class="nav-item" data-nav="sec-logs">
+        <span class="nav-icon">📋</span> Bitácora de Accesos
+      </div>
+
+      <span class="sidebar__section-label">Sistema</span>
+      <div class="nav-item" data-nav="sec-almacenes">
+        <span class="nav-icon">🏭</span> Almacenes
+      </div>
+      <div class="nav-item" data-nav="sec-perfil">
+        <span class="nav-icon">👤</span> Mi Perfil
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <button class="btn-logout" data-action="logout" aria-label="Cerrar sesión">
+        🚪 Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════
+       CONTENIDO PRINCIPAL
+  ══════════════════════════════════════════ -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menú">☰</button>
+        <h1 class="topbar__title">Panel de Administración</h1>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__user">
+          <div class="topbar__avatar" data-auth="avatar">A</div>
+          <div>
+            <div class="topbar__name" data-auth="nombre">Admin</div>
+            <span class="topbar__role-badge badge badge--admin" data-auth="role-badge">ADMIN</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ÁREA DE PÁGINA -->
+    <main class="page-area">
+
+      <!-- ═══════════════════════════════════════
+           SECCIÓN: INICIO / RESUMEN
+      ═══════════════════════════════════════ -->
+      <section class="panel-section active" id="sec-inicio">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Resumen del Sistema</h2>
+            <p class="section-header__sub">Vista global de usuarios y actividad reciente</p>
+          </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card">
+            <span class="stat-card__icon">👥</span>
+            <div class="stat-card__value" id="statTotal">—</div>
+            <div class="stat-card__label">Total Usuarios</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__icon">✅</span>
+            <div class="stat-card__value" id="statActivos">—</div>
+            <div class="stat-card__label">Usuarios Activos</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__icon">⏸️</span>
+            <div class="stat-card__value" id="statInactivos">—</div>
+            <div class="stat-card__label">Inactivos / Bloqueados</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__icon">🔐</span>
+            <div class="stat-card__value" id="statLoginsHoy">—</div>
+            <div class="stat-card__label">Logins hoy</div>
+          </div>
+        </div>
+
+        <!-- Últimos accesos -->
+        <div class="card">
+          <div class="card__header">
+            <span class="card__title">📋 Últimos accesos al sistema</span>
+            <button class="btn btn-outline btn-sm" onclick="cargarLogs(10)">↻ Actualizar</button>
+          </div>
+          <div class="card__body" style="padding:0">
+            <div class="table-wrap">
+              <table class="data-table" id="logsTableInicio">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Fecha / Hora</th>
+                    <th>IP Origen</th>
+                    <th>Estado</th>
+                    <th>Detalles</th>
+                  </tr>
+                </thead>
+                <tbody id="logsBodyInicio">
+                  <tr><td colspan="5" class="text-center text-muted" style="padding:24px">Cargando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════
+           SECCIÓN: GESTIÓN DE USUARIOS (CRUD)
+      ═══════════════════════════════════════ -->
+      <section class="panel-section" id="sec-usuarios">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Gestión de Usuarios</h2>
+            <p class="section-header__sub">CRUD completo — Crear, leer, editar e inactivar usuarios</p>
+          </div>
+          <button class="btn btn-gold" id="btnNuevoUsuario">+ Nuevo Usuario</button>
+        </div>
+
+        <!-- Alerta de acciones -->
+        <div class="alert" id="usuariosAlert" hidden></div>
+
+        <!-- Filtros / Toolbar -->
+        <div class="toolbar" role="search">
+          <div class="toolbar__search">
+            <span class="toolbar__search-icon">🔍</span>
+            <input type="text" id="searchUsuario" placeholder="Buscar por nombre o email..." aria-label="Buscar usuario"/>
+          </div>
+          <select id="filtroRol" aria-label="Filtrar por rol">
+            <option value="">Todos los roles</option>
+            <option value="1">Administrador</option>
+            <option value="2">Operador Almacén</option>
+            <option value="3">Cliente Minorista</option>
+            <option value="4">Cliente Corporativo</option>
+          </select>
+          <select id="filtroAlmacen" aria-label="Filtrar por almacén">
+            <option value="">Todos los almacenes</option>
+          </select>
+          <select id="filtroEstado" aria-label="Filtrar por estado">
+            <option value="">Todos los estados</option>
+            <option value="ACTIVO">Activo</option>
+            <option value="INACTIVO">Inactivo</option>
+            <option value="BLOQUEADO">Bloqueado</option>
+          </select>
+          <button class="btn btn-outline btn-sm" id="btnFiltrar">Filtrar</button>
+        </div>
+
+        <!-- Tabla de usuarios -->
+        <div class="card">
+          <div class="card__body" style="padding:0">
+            <div class="table-wrap">
+              <table class="data-table" id="usuariosTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nombre Completo</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Almacén</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Última Conexión</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="usuariosBody">
+                  <tr><td colspan="9" class="text-center text-muted" style="padding:24px">Cargando usuarios...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════
+           SECCIÓN: BITÁCORA DE ACCESOS
+      ═══════════════════════════════════════ -->
+      <section class="panel-section" id="sec-logs">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Bitácora de Accesos</h2>
+            <p class="section-header__sub">Registro completo de intentos de inicio de sesión</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="cargarLogsCompleto()">↻ Actualizar</button>
+        </div>
+
+        <div class="toolbar">
+          <select id="filtroLogEstado" aria-label="Filtrar por estado de login">
+            <option value="">Todos</option>
+            <option value="EXITOSO">Exitosos</option>
+            <option value="FALLIDO">Fallidos</option>
+          </select>
+          <button class="btn btn-outline btn-sm" id="btnFiltrarLogs">Aplicar</button>
+        </div>
+
+        <div class="card">
+          <div class="card__body" style="padding:0">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Fecha / Hora</th>
+                    <th>IP Origen</th>
+                    <th>Estado Login</th>
+                    <th>Detalles</th>
+                  </tr>
+                </thead>
+                <tbody id="logsBodyCompleto">
+                  <tr><td colspan="7" class="text-center text-muted" style="padding:24px">Cargando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════
+           SECCIÓN: ALMACENES
+      ═══════════════════════════════════════ -->
+      <section class="panel-section" id="sec-almacenes">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Almacenes y Agencias</h2>
+            <p class="section-header__sub">Red de distribución — Sucre, La Paz, Cochabamba, Santa Cruz</p>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="almacenesGrid">
+          <div class="stat-card"><span class="stat-card__icon">⏳</span><div class="stat-card__value">...</div></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════
+           SECCIÓN: MI PERFIL
+      ═══════════════════════════════════════ -->
+      <section class="panel-section" id="sec-perfil">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Mi Perfil</h2>
+            <p class="section-header__sub">Edita tu información personal y contraseña</p>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="profile-avatar" data-auth="avatar">A</div>
+          <div class="profile-info">
+            <div class="profile-info__name" data-auth="nombre">Admin</div>
+            <div class="profile-info__email" data-auth="email"></div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
+
+          <!-- Formulario de datos personales -->
+          <div class="card">
+            <div class="card__header"><span class="card__title">✏️ Editar Datos Personales</span></div>
+            <div class="card__body">
+              <div class="alert" id="perfilAlert" hidden></div>
+              <form id="perfilForm" class="form-grid" novalidate>
+                <div class="form-group">
+                  <label class="form-label" for="pNombre">Nombre completo</label>
+                  <input class="form-input" type="text" id="pNombre" name="nombre_completo" autocomplete="name"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="pTelefono">Teléfono</label>
+                  <input class="form-input" type="tel" id="pTelefono" name="telefono" autocomplete="tel"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="pCiNit">CI / NIT</label>
+                  <input class="form-input" type="text" id="pCiNit" name="ci_nit"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="pRazonSocial">Razón Social (B2B)</label>
+                  <input class="form-input" type="text" id="pRazonSocial" name="razon_social"/>
+                </div>
+                <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Formulario de contraseña -->
+          <div class="card">
+            <div class="card__header"><span class="card__title">🔒 Cambiar Contraseña</span></div>
+            <div class="card__body">
+              <div class="alert" id="passAlert" hidden></div>
+              <form id="passForm" class="form-grid" novalidate>
+                <div class="form-group">
+                  <label class="form-label" for="passActual">Contraseña actual</label>
+                  <input class="form-input" type="password" id="passActual" name="password_actual" required/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="passNueva">Nueva contraseña</label>
+                  <input class="form-input" type="password" id="passNueva" name="password_nueva" required/>
+                  <span class="form-hint">Mínimo 8 chars, 1 mayúscula y 1 número</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="passConfirmar">Confirmar nueva contraseña</label>
+                  <input class="form-input" type="password" id="passConfirmar" name="password_confirmar" required/>
+                </div>
+                <button type="submit" class="btn btn-primary">🔑 Cambiar Contraseña</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main><!-- /page-area -->
+  </div><!-- /main-content -->
+</div><!-- /app-layout -->
+
+<!-- ══════════════════════════════════════════
+     MODAL: CREAR / EDITAR USUARIO
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalUsuario" hidden role="dialog" aria-modal="true" aria-labelledby="modalUsuarioTitle">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title" id="modalUsuarioTitle">Nuevo Usuario</h2>
+      <button class="modal__close" id="modalUsuarioClose" aria-label="Cerrar modal">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="alert" id="modalAlert" hidden></div>
+      <form id="usuarioForm" class="form-grid" novalidate>
+        <input type="hidden" id="userId" name="id"/>
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="uNombre">Nombre completo *</label>
+            <input class="form-input" type="text" id="uNombre" name="nombre_completo" required autocomplete="name"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="uEmail">Email *</label>
+            <input class="form-input" type="email" id="uEmail" name="email" required autocomplete="email"/>
+          </div>
+        </div>
+        <div class="form-group" id="passGroup">
+          <label class="form-label" for="uPassword">Contraseña *</label>
+          <input class="form-input" type="password" id="uPassword" name="password"/>
+          <span class="form-hint">Mín. 8 chars, 1 mayúscula, 1 número</span>
+        </div>
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="uRol">Rol *</label>
+            <select class="form-input form-select" id="uRol" name="rol_id" required>
+              <option value="">Seleccionar rol...</option>
+              <option value="1">👑 Administrador</option>
+              <option value="2">🏭 Operador Almacén</option>
+              <option value="3">🛍️ Cliente Minorista</option>
+              <option value="4">🏛️ Cliente Corporativo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="uAlmacen">Almacén (Operadores)</label>
+            <select class="form-input form-select" id="uAlmacen" name="almacen_id">
+              <option value="">Sin almacén asignado</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="uTipoCliente">Tipo de cliente *</label>
+            <select class="form-input form-select" id="uTipoCliente" name="tipo_cliente" required>
+              <option value="MINORISTA">Minorista</option>
+              <option value="CORPORATIVO">Corporativo (B2B)</option>
+              <option value="INTERNO">Interno</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="uEstado">Estado</label>
+            <select class="form-input form-select" id="uEstado" name="estado">
+              <option value="ACTIVO">Activo</option>
+              <option value="INACTIVO">Inactivo</option>
+              <option value="BLOQUEADO">Bloqueado</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="uCiNit">CI / NIT</label>
+            <input class="form-input" type="text" id="uCiNit" name="ci_nit"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="uTelefono">Teléfono</label>
+            <input class="form-input" type="tel" id="uTelefono" name="telefono"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="uRazonSocial">Razón Social (solo B2B)</label>
+          <input class="form-input" type="text" id="uRazonSocial" name="razon_social" placeholder="Nombre comercial de la empresa"/>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-outline" id="btnCancelarModal">Cancelar</button>
+      <button class="btn btn-primary" id="btnGuardarUsuario">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script src="../../shared/js/api.js"></script>
+<script>window.ROL_REQUERIDO = 'ADMINISTRADOR';</script>
+<script src="../../shared/js/auth-guard.js"></script>
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════════
+   ESTADO LOCAL
+═══════════════════════════════════════════ */
+let todosLosUsuarios = [];
+let almacenesCache   = [];
+let modoEdicion      = false;
+
+/* ═══════════════════════════════════════════
+   HELPERS DE UI
+═══════════════════════════════════════════ */
+function showAlert(elId, msg, tipo = 'danger') {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.className = `alert alert-${tipo}`;
+  el.textContent = msg;
+  el.hidden = false;
+  setTimeout(() => { el.hidden = true; }, 5000);
+}
+
+function formatFecha(dt) {
+  if (!dt) return '—';
+  return new Date(dt).toLocaleString('es-BO', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+function badgeEstado(estado) {
+  const map = {
+    ACTIVO: 'badge--activo', INACTIVO: 'badge--inactivo', BLOQUEADO: 'badge--bloqueado'
+  };
+  return `<span class="badge ${map[estado] || ''}">${estado}</span>`;
+}
+
+function badgeLoginEstado(e) {
+  return `<span class="badge ${e === 'EXITOSO' ? 'badge--exitoso' : 'badge--fallido'}">${e}</span>`;
+}
+
+function badgeRol(rol) {
+  const map = {
+    'ADMINISTRADOR': 'badge--admin',
+    'OPERADOR_ALMACEN': 'badge--operador',
+    'CLIENTE_MINORISTA': 'badge--minorista',
+    'CLIENTE_CORPORATIVO': 'badge--corporativo',
+  };
+  return `<span class="badge ${map[rol] || ''}">${rol}</span>`;
+}
+
+/* ═══════════════════════════════════════════
+   ESTADÍSTICAS
+═══════════════════════════════════════════ */
+async function cargarStats() {
+  try {
+    const r = await API.getStatsUsuarios();
+    document.getElementById('statTotal').textContent     = r.stats.total    || 0;
+    document.getElementById('statActivos').textContent   = r.stats.activos  || 0;
+    document.getElementById('statInactivos').textContent = (r.stats.inactivos || 0) + (r.stats.bloqueados || 0);
+    document.getElementById('statLoginsHoy').textContent = r.stats.logins_hoy || 0;
+  } catch { /* silencioso */ }
+}
+
+/* ═══════════════════════════════════════════
+   LOGS DE ACCESO
+═══════════════════════════════════════════ */
+async function cargarLogs(limite = 10) {
+  try {
+    const r    = await API.getLogs({ limite });
+    const tbody = document.getElementById('logsBodyInicio');
+    if (!r.logs.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted" style="padding:24px">Sin registros</td></tr>';
+      return;
+    }
+    tbody.innerHTML = r.logs.slice(0, limite).map(l => `
+      <tr class="log-row--${l.estado_login.toLowerCase()}">
+        <td>${l.usuario_nombre || '<span class="text-muted">Desconocido</span>'}</td>
+        <td>${formatFecha(l.fecha_hora)}</td>
+        <td><code style="font-size:.75rem">${l.ip_origen}</code></td>
+        <td>${badgeLoginEstado(l.estado_login)}</td>
+        <td class="text-muted" style="font-size:.78rem">${l.detalles || '—'}</td>
+      </tr>`).join('');
+  } catch (err) {
+    console.error('Error logs:', err);
+  }
+}
+
+async function cargarLogsCompleto() {
+  try {
+    const estado = document.getElementById('filtroLogEstado').value;
+    const r      = await API.getLogs({ estado_login: estado, limite: 100 });
+    const tbody  = document.getElementById('logsBodyCompleto');
+    if (!r.logs.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding:24px">Sin registros</td></tr>';
+      return;
+    }
+    tbody.innerHTML = r.logs.map(l => `
+      <tr class="log-row--${l.estado_login.toLowerCase()}">
+        <td>${l.id}</td>
+        <td>${l.usuario_nombre || '—'}</td>
+        <td style="font-size:.78rem">${l.usuario_email || '—'}</td>
+        <td>${formatFecha(l.fecha_hora)}</td>
+        <td><code style="font-size:.75rem">${l.ip_origen}</code></td>
+        <td>${badgeLoginEstado(l.estado_login)}</td>
+        <td class="text-muted" style="font-size:.78rem">${l.detalles || '—'}</td>
+      </tr>`).join('');
+  } catch (err) { console.error(err); }
+}
+
+document.getElementById('btnFiltrarLogs')?.addEventListener('click', cargarLogsCompleto);
+
+/* ═══════════════════════════════════════════
+   ALMACENES
+═══════════════════════════════════════════ */
+async function cargarAlmacenes() {
+  try {
+    const r = await API.listarAlmacenes();
+    almacenesCache = r.almacenes || [];
+
+    // Poblar select en modal
+    const selAlmacen  = document.getElementById('uAlmacen');
+    const selFiltro   = document.getElementById('filtroAlmacen');
+    const opts = almacenesCache.map(a => `<option value="${a.id}">${a.nombre} (${a.ciudad})</option>`).join('');
+    selAlmacen.innerHTML = '<option value="">Sin almacén asignado</option>' + opts;
+    selFiltro.innerHTML  = '<option value="">Todos los almacenes</option>' + opts;
+
+    // Cards de almacenes
+    const grid = document.getElementById('almacenesGrid');
+    grid.innerHTML = almacenesCache.map(a => `
+      <div class="stat-card">
+        <span class="stat-card__icon">${a.tipo === 'CENTRAL' ? '🏭' : '🏢'}</span>
+        <div class="stat-card__value" style="font-size:1.1rem">${a.ciudad}</div>
+        <div class="stat-card__label">${a.nombre}<br/><span style="font-size:.7rem;opacity:.6">${a.tipo} · ${a.direccion || ''}</span></div>
+      </div>`).join('');
+  } catch (err) { console.error('Error almacenes:', err); }
+}
+
+/* ═══════════════════════════════════════════
+   TABLA DE USUARIOS
+═══════════════════════════════════════════ */
+async function cargarUsuarios(filtros = {}) {
+  try {
+    const r = await API.listarUsuarios(filtros);
+    todosLosUsuarios = r.usuarios || [];
+    renderTablaUsuarios(todosLosUsuarios);
+  } catch (err) {
+    showAlert('usuariosAlert', 'Error al cargar usuarios: ' + err.message);
+  }
+}
+
+function renderTablaUsuarios(lista) {
+  const tbody = document.getElementById('usuariosBody');
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-state__icon">🔍</div><div class="empty-state__text">No se encontraron usuarios con esos filtros.</div></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = lista.map(u => `
+    <tr>
+      <td>${u.id}</td>
+      <td><strong>${u.nombre_completo}</strong></td>
+      <td style="font-size:.8rem">${u.email}</td>
+      <td>${badgeRol(u.rol)}</td>
+      <td>${u.almacen_nombre ? `<span class="text-sm">${u.almacen_nombre}</span>` : '<span class="text-muted">—</span>'}</td>
+      <td><span class="badge" style="background:rgba(44,26,29,.08);color:#5C3D35">${u.tipo_cliente}</span></td>
+      <td>${badgeEstado(u.estado)}</td>
+      <td style="font-size:.78rem">${formatFecha(u.ultima_conexion)}</td>
+      <td>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline btn-xs" onclick="abrirEdicion(${u.id})" title="Editar">✏️</button>
+          <button class="btn btn-danger btn-xs" onclick="inactivarUsuario(${u.id}, '${u.nombre_completo}')" title="Inactivar" ${u.estado === 'INACTIVO' ? 'disabled' : ''}>🚫</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+/* ── Búsqueda en tiempo real ── */
+document.getElementById('searchUsuario')?.addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  const filtrados = todosLosUsuarios.filter(u =>
+    u.nombre_completo.toLowerCase().includes(q) ||
+    u.email.toLowerCase().includes(q)
+  );
+  renderTablaUsuarios(filtrados);
+});
+
+/* ── Botón filtrar ── */
+document.getElementById('btnFiltrar')?.addEventListener('click', () => {
+  const filtros = {
+    rol_id:    document.getElementById('filtroRol').value,
+    almacen_id: document.getElementById('filtroAlmacen').value,
+    estado:    document.getElementById('filtroEstado').value,
+  };
+  cargarUsuarios(filtros);
+});
+
+/* ═══════════════════════════════════════════
+   MODAL CREAR / EDITAR USUARIO
+═══════════════════════════════════════════ */
+function abrirModal(titulo = 'Nuevo Usuario') {
+  document.getElementById('modalUsuarioTitle').textContent = titulo;
+  document.getElementById('modalUsuario').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModal() {
+  document.getElementById('modalUsuario').hidden = true;
+  document.getElementById('usuarioForm').reset();
+  document.getElementById('userId').value = '';
+  document.getElementById('modalAlert').hidden = true;
+  document.body.style.overflow = '';
+  modoEdicion = false;
+  document.getElementById('passGroup').style.display = 'block';
+}
+
+document.getElementById('btnNuevoUsuario')?.addEventListener('click', () => {
+  modoEdicion = false;
+  abrirModal('Nuevo Usuario');
+});
+
+document.getElementById('modalUsuarioClose')?.addEventListener('click', cerrarModal);
+document.getElementById('btnCancelarModal')?.addEventListener('click', cerrarModal);
+
+document.getElementById('modalUsuario')?.addEventListener('click', e => {
+  if (e.target.id === 'modalUsuario') cerrarModal();
+});
+
+async function abrirEdicion(id) {
+  try {
+    const r = await API.obtenerUsuario(id);
+    const u = r.usuario;
+    modoEdicion = true;
+
+    document.getElementById('userId').value         = u.id;
+    document.getElementById('uNombre').value        = u.nombre_completo || '';
+    document.getElementById('uEmail').value         = u.email || '';
+    document.getElementById('uRol').value           = u.rol_id || '';
+    document.getElementById('uAlmacen').value       = u.almacen_id || '';
+    document.getElementById('uTipoCliente').value   = u.tipo_cliente || 'MINORISTA';
+    document.getElementById('uEstado').value        = u.estado || 'ACTIVO';
+    document.getElementById('uCiNit').value         = u.ci_nit || '';
+    document.getElementById('uTelefono').value      = u.telefono || '';
+    document.getElementById('uRazonSocial').value   = u.razon_social || '';
+
+    // Ocultar campo de contraseña al editar
+    document.getElementById('passGroup').style.display = 'none';
+    document.getElementById('uPassword').removeAttribute('required');
+
+    abrirModal('Editar Usuario');
+  } catch (err) {
+    showAlert('usuariosAlert', 'Error al cargar usuario: ' + err.message);
+  }
+}
+
+/* ── Guardar usuario (crear o actualizar) ── */
+document.getElementById('btnGuardarUsuario')?.addEventListener('click', async () => {
+  const btn = document.getElementById('btnGuardarUsuario');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  try {
+    const id  = document.getElementById('userId').value;
+    const datos = {
+      nombre_completo: document.getElementById('uNombre').value.trim(),
+      email:           document.getElementById('uEmail').value.trim(),
+      rol_id:          document.getElementById('uRol').value,
+      almacen_id:      document.getElementById('uAlmacen').value || null,
+      tipo_cliente:    document.getElementById('uTipoCliente').value,
+      estado:          document.getElementById('uEstado').value,
+      ci_nit:          document.getElementById('uCiNit').value.trim(),
+      telefono:        document.getElementById('uTelefono').value.trim(),
+      razon_social:    document.getElementById('uRazonSocial').value.trim(),
+    };
+
+    if (!modoEdicion) {
+      datos.password = document.getElementById('uPassword').value;
+    }
+
+    if (modoEdicion) {
+      await API.actualizarUsuario(id, datos);
+      showAlert('usuariosAlert', '✅ Usuario actualizado correctamente.', 'success');
+    } else {
+      await API.crearUsuario(datos);
+      showAlert('usuariosAlert', '✅ Usuario creado correctamente.', 'success');
+    }
+
+    cerrarModal();
+    cargarUsuarios();
+    cargarStats();
+  } catch (err) {
+    const msg = err?.data?.mensaje || err.message || 'Error desconocido';
+    document.getElementById('modalAlert').className = 'alert alert-danger';
+    document.getElementById('modalAlert').textContent = '❌ ' + msg;
+    document.getElementById('modalAlert').hidden = false;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Guardar';
+  }
+});
+
+/* ── Inactivar usuario ── */
+async function inactivarUsuario(id, nombre) {
+  if (!confirm(`¿Estás seguro de inactivar a "${nombre}"? No podrá iniciar sesión.`)) return;
+  try {
+    await API.inactivarUsuario(id);
+    showAlert('usuariosAlert', `✅ "${nombre}" ha sido inactivado.`, 'success');
+    cargarUsuarios();
+    cargarStats();
+  } catch (err) {
+    showAlert('usuariosAlert', '❌ ' + (err?.data?.mensaje || err.message));
+  }
+}
+
+/* ═══════════════════════════════════════════
+   PERFIL DEL ADMIN
+═══════════════════════════════════════════ */
+async function cargarPerfil() {
+  try {
+    const r = await API.getMe();
+    const u = r.usuario;
+    document.getElementById('pNombre').value       = u.nombre_completo || '';
+    document.getElementById('pTelefono').value     = u.telefono || '';
+    document.getElementById('pCiNit').value        = u.ci_nit || '';
+    document.getElementById('pRazonSocial').value  = u.razon_social || '';
+  } catch { /* silencioso */ }
+}
+
+document.getElementById('perfilForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.submitter;
+  btn.disabled = true;
+  try {
+    await API.updatePerfil({
+      nombre_completo: document.getElementById('pNombre').value.trim(),
+      telefono:        document.getElementById('pTelefono').value.trim(),
+      ci_nit:          document.getElementById('pCiNit').value.trim(),
+      razon_social:    document.getElementById('pRazonSocial').value.trim(),
+    });
+    showAlert('perfilAlert', '✅ Perfil actualizado correctamente.', 'success');
+  } catch (err) {
+    showAlert('perfilAlert', '❌ ' + (err?.data?.mensaje || err.message));
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('passForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.submitter;
+  btn.disabled = true;
+  try {
+    await API.cambiarPassword({
+      password_actual:   document.getElementById('passActual').value,
+      password_nueva:    document.getElementById('passNueva').value,
+      password_confirmar: document.getElementById('passConfirmar').value,
+    });
+    showAlert('passAlert', '✅ Contraseña cambiada. Vuelve a iniciar sesión.', 'success');
+    document.getElementById('passForm').reset();
+    setTimeout(() => API.cerrarSesion(), 2000);
+  } catch (err) {
+    showAlert('passAlert', '❌ ' + (err?.data?.mensaje || err.message));
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+/* ═══════════════════════════════════════════
+   NAVEGACIÓN — Cargar datos al entrar a sección
+═══════════════════════════════════════════ */
+document.querySelectorAll('[data-nav]').forEach(item => {
+  item.addEventListener('click', () => {
+    const id = item.dataset.nav;
+    if (id === 'sec-usuarios') cargarUsuarios();
+    if (id === 'sec-logs')     cargarLogsCompleto();
+    if (id === 'sec-almacenes') cargarAlmacenes();
+    if (id === 'sec-perfil')   cargarPerfil();
+  });
+});
+
+/* ═══════════════════════════════════════════
+   INICIALIZACIÓN
+═══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', async () => {
+  await cargarAlmacenes();
+  await cargarStats();
+  await cargarLogs(10);
+});
+</script>
+</body>
+</html>

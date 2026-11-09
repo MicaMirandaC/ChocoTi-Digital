@@ -63,6 +63,38 @@
           <span class="cart-count" id="cartCount" aria-live="polite">0</span>
         </button>
 
+        <!-- Botón de Acceso / Sesión de Usuario (Fase 2) -->
+        <div class="header__auth-wrap" id="headerAuthWrap">
+          <button class="btn-header-auth" id="headerAuthBtn" aria-label="Acceso y Mi Cuenta" aria-haspopup="true">
+            <i data-lucide="user" aria-hidden="true"></i>
+            <span class="header-auth-text" id="headerAuthText">Ingresar</span>
+          </button>
+
+          <!-- Dropdown del usuario autenticado -->
+          <div class="user-dropdown-menu" id="userDropdownMenu" hidden>
+            <div class="user-dropdown-header">
+              <span class="user-dropdown-name" id="userDropdownName">Usuario</span>
+              <span class="user-dropdown-badge" id="userDropdownBadge">ROL</span>
+              <span class="user-dropdown-email" id="userDropdownEmail">usuario@chocolatesti.bo</span>
+            </div>
+            <div class="user-dropdown-body">
+              <a href="#" class="user-dropdown-item" id="btnIrDashboard">
+                <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+                <span>Mi Panel / Dashboard</span>
+              </a>
+              <button type="button" class="user-dropdown-item" id="btnAbrirPerfil">
+                <i data-lucide="user-cog" aria-hidden="true"></i>
+                <span>Mi Perfil y Seguridad</span>
+              </button>
+              <div class="user-dropdown-divider"></div>
+              <button type="button" class="user-dropdown-item user-dropdown-item--danger" id="btnCerrarSesion">
+                <i data-lucide="log-out" aria-hidden="true"></i>
+                <span>Cerrar Sesión</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Hamburguesa (mobile) -->
         <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">
           <span class="hamburger__bar"></span>
@@ -72,6 +104,20 @@
       </div>
     </div>
   </header>
+
+  <!-- Banner de bienvenida para usuario autenticado (Fase 2) -->
+  <div class="role-welcome-banner" id="roleWelcomeBanner" hidden>
+    <div class="container role-welcome-banner__info">
+      <span>🍫 Sesión activa: <strong id="bannerUserName">Usuario</strong></span>
+      <span class="role-welcome-banner__badge" id="bannerUserBadge">ROL</span>
+      <span id="bannerUserDetail" style="font-size:0.85rem;opacity:0.9">Bienvenido al sistema omnicanal ChocoTi-Digital.</span>
+      <a href="#" class="btn-banner-dash" id="bannerDashLink">
+        <i data-lucide="external-link" aria-hidden="true"></i>
+        <span>Acceder a mi Dashboard</span>
+      </a>
+    </div>
+    <button type="button" class="btn-banner-close" id="btnBannerClose" aria-label="Cerrar aviso">✕</button>
+  </div>
 
   <!-- Overlay del menú móvil -->
   <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
@@ -850,10 +896,194 @@
   </div>
 
   <!-- =========================================================
+       MODAL DE INICIO DE SESIÓN INTERACTIVO (FASE 2)
+  ========================================================= -->
+  <div class="modal-overlay modal-overlay--center" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle" hidden>
+    <div class="modal modal--auth">
+      <div class="modal__header">
+        <h2 class="modal__title" id="loginModalTitle">🍫 Iniciar Sesión</h2>
+        <button class="modal__close" id="loginModalClose" aria-label="Cerrar ventana de login">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal__body">
+        
+        <!-- Selector rápido de credenciales para los 4 roles -->
+        <div class="creds-selector-wrap">
+          <span class="creds-selector-label">⚡ Cuentas de Prueba (Haz clic para auto-rellenar):</span>
+          <div class="creds-pills-grid">
+            <button type="button" class="cred-pill" data-email="admin@chocolatesti.bo" data-pass="Admin2024!" data-role="ADMINISTRADOR">
+              <span class="cred-pill__role">👑 Administrador</span>
+              <span class="cred-pill__email">admin@chocolatesti.bo</span>
+            </button>
+            <button type="button" class="cred-pill" data-email="operador.sucre@chocolatesti.bo" data-pass="Operador2024!" data-role="OPERADOR_ALMACEN">
+              <span class="cred-pill__role">🏭 Operador Sucre</span>
+              <span class="cred-pill__email">operador.sucre@...</span>
+            </button>
+            <button type="button" class="cred-pill" data-email="cliente@gmail.com" data-pass="Cliente2024!" data-role="CLIENTE_MINORISTA">
+              <span class="cred-pill__role">🛍️ Minorista</span>
+              <span class="cred-pill__email">cliente@gmail.com</span>
+            </button>
+            <button type="button" class="cred-pill" data-email="empresa@acme.bo" data-pass="Empresa2024!" data-role="CLIENTE_CORPORATIVO">
+              <span class="cred-pill__role">🏛️ Corporativo B2B</span>
+              <span class="cred-pill__email">empresa@acme.bo</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Alerta de estado -->
+        <div class="auth-alert auth-alert--danger" id="loginModalAlert" hidden>
+          <i data-lucide="alert-circle" aria-hidden="true"></i>
+          <span id="loginModalAlertText"></span>
+        </div>
+
+        <!-- Formulario -->
+        <form id="loginModalForm" novalidate>
+          <div class="form__group">
+            <label class="form__label" for="loginEmail">Correo Electrónico</label>
+            <input class="form__input" type="email" id="loginEmail" placeholder="ejemplo@chocolatesti.bo" required autocomplete="email"/>
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="loginPassword">Contraseña</label>
+            <div class="auth-input-wrap">
+              <input class="form__input" type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password"/>
+              <button type="button" class="btn-toggle-eye" id="toggleModalPass" aria-label="Mostrar contraseña">
+                👁️
+              </button>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4);font-size:var(--text-xs)">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--color-text-mid)">
+              <input type="checkbox" id="chkAutoRedirect" checked style="accent-color:var(--color-gold)"/>
+              <span>Ir a mi Dashboard al iniciar sesión</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--full" id="loginModalSubmit">
+            <i data-lucide="log-in" aria-hidden="true"></i>
+            <span id="loginSubmitText">Acceder a ChocoTi-Digital</span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL DE PERFIL DE USUARIO Y CAMBIO DE CONTRASEÑA (FASE 2)
+  ========================================================= -->
+  <div class="modal-overlay modal-overlay--center" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle" hidden>
+    <div class="modal modal--profile">
+      <div class="modal__header">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="header-auth-avatar" id="modalUserAvatar" style="width:34px;height:34px;font-size:1rem">U</div>
+          <div>
+            <h2 class="modal__title" id="profileModalTitle" style="font-size:1.15rem;margin:0">Mi Perfil</h2>
+            <span id="modalUserRole" style="font-size:0.75rem;font-weight:700;color:var(--color-gold-dark)">ROL</span>
+          </div>
+        </div>
+        <button class="modal__close" id="profileModalClose" aria-label="Cerrar modal de perfil">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        
+        <!-- Pestañas -->
+        <div class="profile-tabs">
+          <button type="button" class="profile-tab-btn active" data-profile-tab="datos">
+            <i data-lucide="user"></i>
+            <span>Datos Personales</span>
+          </button>
+          <button type="button" class="profile-tab-btn" data-profile-tab="clave">
+            <i data-lucide="key"></i>
+            <span>Seguridad y Clave</span>
+          </button>
+        </div>
+
+        <!-- Alerta de perfil -->
+        <div class="auth-alert" id="profileModalAlert" hidden>
+          <span id="profileModalAlertText"></span>
+        </div>
+
+        <!-- Pestaña 1: Datos personales -->
+        <div class="profile-tab-pane" id="tabPaneDatos">
+          <form id="perfilDatosForm" novalidate>
+            <div class="form__group">
+              <label class="form__label" for="profNombre">Nombre Completo</label>
+              <input class="form__input" type="text" id="profNombre" required/>
+            </div>
+            <div class="form__row">
+              <div class="form__group">
+                <label class="form__label" for="profEmail">Correo Electrónico (Registrado)</label>
+                <input class="form__input" type="email" id="profEmail" readonly style="background:var(--color-ivory);cursor:not-allowed;opacity:0.85"/>
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="profTelefono">Teléfono / WhatsApp</label>
+                <input class="form__input" type="tel" id="profTelefono" placeholder="7XXXXXXX"/>
+              </div>
+            </div>
+            <div class="form__row">
+              <div class="form__group">
+                <label class="form__label" for="profCiNit">CI / NIT</label>
+                <input class="form__input" type="text" id="profCiNit" placeholder="Ej: 10203040"/>
+              </div>
+              <div class="form__group" id="profGroupRazonSocial">
+                <label class="form__label" for="profRazonSocial">Razón Social</label>
+                <input class="form__input" type="text" id="profRazonSocial" placeholder="Empresa S.R.L."/>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4)">
+              <button type="submit" class="btn btn--primary" id="btnGuardarPerfil">
+                <i data-lucide="save" aria-hidden="true"></i>
+                <span>Guardar Cambios</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Pestaña 2: Cambio de clave -->
+        <div class="profile-tab-pane" id="tabPaneClave" hidden>
+          <form id="perfilClaveForm" novalidate>
+            <div class="form__group">
+              <label class="form__label" for="passActual">Contraseña Actual</label>
+              <input class="form__input" type="password" id="passActual" placeholder="••••••••" required autocomplete="current-password"/>
+            </div>
+            <div class="form__row">
+              <div class="form__group">
+                <label class="form__label" for="passNueva">Nueva Contraseña</label>
+                <input class="form__input" type="password" id="passNueva" placeholder="Mínimo 8 caracteres" required autocomplete="new-password"/>
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="passConfirmar">Confirmar Contraseña</label>
+                <input class="form__input" type="password" id="passConfirmar" placeholder="Repite la contraseña" required autocomplete="new-password"/>
+              </div>
+            </div>
+            <p style="font-size:0.75rem;color:var(--color-text-muted);margin-bottom:var(--space-4)">
+              🔒 Requisitos: mínimo 8 caracteres, al menos 1 mayúscula, 1 minúscula y 1 número.
+            </p>
+            <div style="display:flex;justify-content:flex-end">
+              <button type="submit" class="btn btn--primary" id="btnActualizarPassword">
+                <i data-lucide="shield-check" aria-hidden="true"></i>
+                <span>Actualizar Contraseña</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
        TOAST NOTIFICATIONS
   ========================================================= -->
   <div class="toast-container" id="toastContainer" aria-live="assertive" aria-atomic="true" role="status"></div>
 
+  <!-- Capa de Comunicación API REST (Fase 2) -->
+  <script src="frontend/shared/js/api.js"></script>
   <!-- Script principal -->
   <script src="script.js"></script>
 </body>

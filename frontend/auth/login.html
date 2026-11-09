@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Iniciar sesión — ChocoTi-Digital, Chocolates Para Ti"/>
+  <title>Iniciar Sesión | ChocoTi-Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── Variables ── */
+    :root {
+      --cacao: #2C1A1D; --cacao-mid: #3D2314;
+      --gold: #D4AF37;  --gold-dark: #B8941F; --gold-light: #F0D780;
+      --cream: #FDFBF7; --ivory: #F5EFEB; --ivory-dark: #E8DDD5;
+      --white: #FFFFFF; --danger: #DC2626; --success: #16A34A;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --radius-md: 10px; --radius-lg: 16px; --radius-full: 9999px;
+      --shadow-lg: 0 20px 50px rgba(44,26,29,.22);
+      --t-base: 250ms ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, var(--cacao) 0%, var(--cacao-mid) 50%, #4A2C1A 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Formas decorativas */
+    body::before, body::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(212,175,55,.06);
+      pointer-events: none;
+    }
+    body::before { width: 600px; height: 600px; top: -150px; right: -100px; }
+    body::after  { width: 300px; height: 300px; bottom: -80px; left: -60px;  }
+
+    /* ── CARD DE LOGIN ── */
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      z-index: 1;
+      animation: cardIn .4s ease;
+    }
+    @keyframes cardIn {
+      from { transform: translateY(24px); opacity: 0; }
+      to   { transform: none; opacity: 1; }
+    }
+
+    /* ── LOGO ── */
+    .login-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .login-logo__icon { font-size: 3rem; display: block; margin-bottom: 8px; }
+    .login-logo__brand {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--cacao);
+      display: block;
+      line-height: 1.1;
+    }
+    .login-logo__sub {
+      font-size: .75rem;
+      color: var(--gold-dark);
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* ── TÍTULO ── */
+    .login-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--cacao);
+      margin-bottom: 6px;
+    }
+    .login-sub { font-size: .875rem; color: #9A7B73; margin-bottom: 24px; }
+
+    /* ── ALERTAS ── */
+    .alert {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: .875rem;
+      margin-bottom: 16px;
+      border-left: 4px solid;
+      animation: alertIn .2s ease;
+    }
+    @keyframes alertIn { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: none; } }
+    .alert-danger  { background: rgba(220,38,38,.08);  color: #991B1B; border-color: var(--danger);  }
+    .alert-success { background: rgba(22,163,74,.08);  color: #166534; border-color: var(--success); }
+    .alert[hidden] { display: none; }
+
+    /* ── FORM ── */
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-label { font-size: .8rem; font-weight: 600; color: var(--cacao); }
+    .input-wrap { position: relative; }
+    .form-input {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 2px solid var(--ivory-dark);
+      border-radius: var(--radius-md);
+      font-size: .9rem;
+      font-family: var(--font-body);
+      color: var(--cacao);
+      background: var(--ivory);
+      transition: border-color var(--t-base), box-shadow var(--t-base);
+      appearance: none;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(212,175,55,.15);
+    }
+    .form-input.error { border-color: var(--danger); }
+    .form-error { font-size: .75rem; color: var(--danger); font-weight: 500; display: none; }
+    .form-error.visible { display: block; }
+
+    .toggle-pass {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #9A7B73;
+      font-size: .9rem;
+      padding: 4px;
+      transition: color var(--t-base);
+      line-height: 1;
+    }
+    .toggle-pass:hover { color: var(--cacao); }
+
+    /* ── BOTÓN LOGIN ── */
+    .btn-login {
+      width: 100%;
+      padding: .85rem;
+      background: var(--cacao);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all var(--t-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-login:hover:not(:disabled) { background: var(--cacao-mid); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(44,26,29,.25); }
+    .btn-login:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-login.loading .spinner { display: block; }
+    .btn-login.loading .btn-text { display: none; }
+
+    /* ── INFO BOX DE CREDENCIALES ── */
+    .creds-toggle {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .creds-toggle button {
+      font-size: .78rem;
+      color: var(--gold-dark);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .creds-box {
+      margin-top: 12px;
+      background: var(--ivory);
+      border: 1px solid var(--ivory-dark);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: .78rem;
+      color: #5C3D35;
+    }
+    .creds-box[hidden] { display: none; }
+    .creds-box table { width: 100%; border-collapse: collapse; }
+    .creds-box td { padding: 3px 6px; }
+    .creds-box td:first-child { font-weight: 600; color: var(--cacao); white-space: nowrap; }
+    .creds-box tr { cursor: pointer; border-radius: 4px; }
+    .creds-box tr:hover td { background: rgba(212,175,55,.10); }
+    .creds-box caption { font-weight: 700; color: var(--cacao); margin-bottom: 8px; display: block; text-align: left; }
+
+    .link-forgot {
+      display: block;
+      text-align: right;
+      font-size: .78rem;
+      color: var(--gold-dark);
+      margin-top: -8px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .link-forgot:hover { text-decoration: underline; }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: .75rem;
+      color: #9A7B73;
+    }
+    .login-footer a { color: var(--cacao); font-weight: 600; }
+    .login-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Redirigir si ya está autenticado -->
+  <script src="../shared/js/api.js"></script>
+  <script>
+    if (API.estaAutenticado()) {
+      const sesion = API.obtenerSesion();
+      window.location.replace(API.resolverRutaDashboard(sesion.usuario?.rol));
+    }
+  </script>
+
+  <div class="login-card" role="main">
+
+    <!-- Logo -->
+    <div class="login-logo" aria-label="Chocolates Para Ti - ChocoTi-Digital">
+      <span class="login-logo__icon" aria-hidden="true">🍫</span>
+      <span class="login-logo__brand">Chocolates Para Ti</span>
+      <span class="login-logo__sub">ChocoTi-Digital · Sprint 1</span>
+    </div>
+
+    <h1 class="login-title">Bienvenido de vuelta</h1>
+    <p class="login-sub">Inicia sesión para acceder a tu panel</p>
+
+    <!-- Alerta de error/éxito -->
+    <div class="alert alert-danger" id="loginAlert" role="alert" hidden>
+      <span id="loginAlertMsg"></span>
+    </div>
+
+    <!-- Formulario de login -->
+    <form id="loginForm" novalidate>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label" for="email">Correo electrónico</label>
+        <input
+          class="form-input" type="email" id="email" name="email"
+          placeholder="tu@correo.com" autocomplete="email" required
+          aria-required="true"
+        />
+        <span class="form-error" id="emailError" role="alert"></span>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="form-group">
+        <label class="form-label" for="password">Contraseña</label>
+        <div class="input-wrap">
+          <input
+            class="form-input" type="password" id="password" name="password"
+            placeholder="••••••••" autocomplete="current-password" required
+            aria-required="true"
+          />
+          <button type="button" class="toggle-pass" id="togglePass" aria-label="Mostrar u ocultar contraseña">
+            👁️
+          </button>
+        </div>
+        <span class="form-error" id="passwordError" role="alert"></span>
+      </div>
+
+      <a href="#" class="link-forgot">¿Olvidaste tu contraseña?</a>
+
+      <!-- Botón submit -->
+      <button type="submit" class="btn-login" id="loginBtn">
+        <div class="spinner" aria-hidden="true"></div>
+        <span class="btn-text">Iniciar Sesión</span>
+      </button>
+
+    </form>
+
+    <!-- Credenciales de prueba -->
+    <div class="creds-toggle">
+      <button type="button" id="toggleCreds">Ver credenciales de prueba</button>
+    </div>
+
+    <div class="creds-box" id="credsBox" hidden>
+      <caption>Haz clic en una fila para auto-rellenar</caption>
+      <table>
+        <tr data-email="admin@chocolatesti.bo" data-pass="Admin2024!">
+          <td>👑 Admin</td>
+          <td>admin@chocolatesti.bo</td>
+          <td>Admin2024!</td>
+        </tr>
+        <tr data-email="operador.sucre@chocolatesti.bo" data-pass="Operador2024!">
+          <td>🏭 Op. Sucre</td>
+          <td>operador.sucre@chocolatesti.bo</td>
+          <td>Operador2024!</td>
+        </tr>
+        <tr data-email="operador.lapaz@chocolatesti.bo" data-pass="Operador2024!">
+          <td>🏢 Op. La Paz</td>
+          <td>operador.lapaz@chocolatesti.bo</td>
+          <td>Operador2024!</td>
+        </tr>
+        <tr data-email="cliente@gmail.com" data-pass="Cliente2024!">
+          <td>🛍️ Minorista</td>
+          <td>cliente@gmail.com</td>
+          <td>Cliente2024!</td>
+        </tr>
+        <tr data-email="empresa@acme.bo" data-pass="Empresa2024!">
+          <td>🏛️ Corporativo</td>
+          <td>empresa@acme.bo</td>
+          <td>Empresa2024!</td>
+        </tr>
+      </table>
+    </div>
+
+    <p class="login-footer">
+      ¿Eres nuevo cliente?
+      <a href="../../index.html">Ver catálogo ChocoTi-Digital →</a>
+    </p>
+  </div><!-- /login-card -->
+
+  <script>
+    'use strict';
+    /* ── Referencias DOM ── */
+    const form        = document.getElementById('loginForm');
+    const emailInput  = document.getElementById('email');
+    const passInput   = document.getElementById('password');
+    const loginBtn    = document.getElementById('loginBtn');
+    const alertEl     = document.getElementById('loginAlert');
+    const alertMsg    = document.getElementById('loginAlertMsg');
+    const togglePass  = document.getElementById('togglePass');
+    const toggleCreds = document.getElementById('toggleCreds');
+    const credsBox    = document.getElementById('credsBox');
+
+    /* ── Toggle visibilidad contraseña ── */
+    togglePass.addEventListener('click', () => {
+      const isText = passInput.type === 'text';
+      passInput.type    = isText ? 'password' : 'text';
+      togglePass.textContent = isText ? '👁️' : '🙈';
+    });
+
+    /* ── Toggle credenciales de prueba ── */
+    toggleCreds.addEventListener('click', () => {
+      credsBox.hidden = !credsBox.hidden;
+      toggleCreds.textContent = credsBox.hidden
+        ? 'Ver credenciales de prueba'
+        : 'Ocultar credenciales';
+    });
+
+    /* ── Auto-rellenar al hacer clic en fila de creds ── */
+    credsBox.querySelectorAll('tr').forEach(row => {
+      row.addEventListener('click', () => {
+        emailInput.value = row.dataset.email;
+        passInput.value  = row.dataset.pass;
+        credsBox.hidden  = true;
+        toggleCreds.textContent = 'Ver credenciales de prueba';
+        emailInput.focus();
+      });
+    });
+
+    /* ── Mostrar error ── */
+    function mostrarError(msg) {
+      alertMsg.textContent = msg;
+      alertEl.className = 'alert alert-danger';
+      alertEl.hidden    = false;
+    }
+
+    /* ── Limpiar error ── */
+    function limpiarError() { alertEl.hidden = true; }
+
+    /* ── Validación de campos ── */
+    function validar() {
+      let ok = true;
+      const emailErr = document.getElementById('emailError');
+      const passErr  = document.getElementById('passwordError');
+
+      emailErr.className = 'form-error';
+      passErr.className  = 'form-error';
+      emailInput.classList.remove('error');
+      passInput.classList.remove('error');
+
+      if (!emailInput.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+        emailErr.textContent = 'Ingresa un correo electrónico válido.';
+        emailErr.className += ' visible';
+        emailInput.classList.add('error');
+        ok = false;
+      }
+      if (!passInput.value || passInput.value.length < 6) {
+        passErr.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+        passErr.className += ' visible';
+        passInput.classList.add('error');
+        ok = false;
+      }
+      return ok;
+    }
+
+    /* ── Lógica de login ── */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      limpiarError();
+      if (!validar()) return;
+
+      loginBtn.disabled = true;
+      loginBtn.classList.add('loading');
+
+      try {
+        const res = await API.login(emailInput.value.trim(), passInput.value);
+
+        // Guardar sesión en localStorage
+        API.guardarSesion(res.token, res.usuario);
+
+        // Redirigir al dashboard según el rol
+        window.location.href = API.resolverRutaDashboard(res.usuario.rol);
+
+      } catch (err) {
+        const msg = err?.data?.mensaje || err.message || 'Error de conexión con el servidor.';
+        mostrarError('❌ ' + msg);
+        loginBtn.disabled = false;
+        loginBtn.classList.remove('loading');
+        passInput.value = '';
+        passInput.focus();
+      }
+    });
+
+    /* ── Limpiar error al escribir ── */
+    [emailInput, passInput].forEach(inp => {
+      inp.addEventListener('input', limpiarError);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Almacén | ChocoTi-Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../shared/css/dashboard.css"/>
+</head>
+<body>
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-icon">🍫</span>
+      <div class="sidebar__logo-text">
+        <span class="sidebar__brand">Chocolates Para Ti</span>
+        <span class="sidebar__sub">ChocoTi-Digital</span>
+      </div>
+    </div>
+    <div class="sidebar__role-badge role-oper" data-auth="sidebar-role-badge">OPERADOR</div>
+    <nav class="sidebar__nav">
+      <span class="sidebar__section-label">Panel</span>
+      <div class="nav-item active" data-nav="sec-inicio">
+        <span class="nav-icon">🏠</span> Mi Almacén
+      </div>
+      <div class="nav-item" data-nav="sec-inventario">
+        <span class="nav-icon">📦</span> Inventario
+      </div>
+      <div class="nav-item" data-nav="sec-despachos">
+        <span class="nav-icon">🚚</span> Despachos
+      </div>
+      <span class="sidebar__section-label">Cuenta</span>
+      <div class="nav-item" data-nav="sec-perfil">
+        <span class="nav-icon">👤</span> Mi Perfil
+      </div>
+    </nav>
+    <div class="sidebar__footer">
+      <button class="btn-logout" data-action="logout">🚪 Cerrar Sesión</button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar__left">
+        <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+        <h1 class="topbar__title" id="topbarTitle">Panel de Almacén</h1>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__user">
+          <div class="topbar__avatar" data-auth="avatar">O</div>
+          <div>
+            <div class="topbar__name" data-auth="nombre">Operador</div>
+            <span class="topbar__role-badge badge badge--operador">OPERADOR</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-area">
+
+      <!-- INICIO: MI ALMACÉN -->
+      <section class="panel-section active" id="sec-inicio">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title" id="almacenTitulo">Mi Almacén</h2>
+            <p class="section-header__sub" id="almacenSubtitulo">Cargando información del almacén asignado...</p>
+          </div>
+        </div>
+
+        <!-- Info del almacén -->
+        <div class="card mb-4" id="almacenInfoCard">
+          <div class="card__header"><span class="card__title">🏭 Información del Almacén Asignado</span></div>
+          <div class="card__body">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px" id="almacenDetalles">
+              <div><div style="font-size:.75rem;color:#9A7B73;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Nombre</div><div style="font-weight:600;color:#2C1A1D" id="almNombre">—</div></div>
+              <div><div style="font-size:.75rem;color:#9A7B73;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Ciudad</div><div style="font-weight:600;color:#2C1A1D" id="almCiudad">—</div></div>
+              <div><div style="font-size:.75rem;color:#9A7B73;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Tipo</div><div style="font-weight:600;color:#2C1A1D" id="almTipo">—</div></div>
+              <div style="grid-column:1/-1"><div style="font-size:.75rem;color:#9A7B73;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Dirección</div><div style="font-weight:600;color:#2C1A1D" id="almDireccion">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-card__icon">📦</span>
+            <div class="stat-card__value">—</div>
+            <div class="stat-card__label">Pedidos hoy</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__icon">⚠️</span>
+            <div class="stat-card__value">—</div>
+            <div class="stat-card__label">Stock bajo alerta</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__icon">🚚</span>
+            <div class="stat-card__value">—</div>
+            <div class="stat-card__label">Despachos pendientes</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__icon">✅</span>
+            <div class="stat-card__value">—</div>
+            <div class="stat-card__label">Completados hoy</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__body">
+            <div class="alert alert-info" style="display:flex">
+              ℹ️ Los módulos de <strong>&nbsp;Inventario&nbsp;</strong> y <strong>&nbsp;Despachos&nbsp;</strong>
+              serán implementados en el <strong>Sprint 2</strong> de ChocoTi-Digital.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INVENTARIO (placeholder Sprint 2) -->
+      <section class="panel-section" id="sec-inventario">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Inventario del Almacén</h2>
+            <p class="section-header__sub">Control de stock de chocolates y materiales</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__body">
+            <div class="empty-state">
+              <div class="empty-state__icon">📦</div>
+              <div class="empty-state__text">
+                <strong>Módulo disponible en Sprint 2</strong><br/>
+                Aquí podrás gestionar el inventario local de tu almacén:<br/>
+                stock de productos, alertas de bajo inventario y movimientos.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DESPACHOS (placeholder Sprint 2) -->
+      <section class="panel-section" id="sec-despachos">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Órdenes de Despacho</h2>
+            <p class="section-header__sub">Gestión de envíos desde este almacén</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__body">
+            <div class="empty-state">
+              <div class="empty-state__icon">🚚</div>
+              <div class="empty-state__text">
+                <strong>Módulo disponible en Sprint 2</strong><br/>
+                Aquí podrás ver y actualizar el estado de los pedidos<br/>
+                asignados a tu almacén para su despacho.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MI PERFIL -->
+      <section class="panel-section" id="sec-perfil">
+        <div class="section-header">
+          <div class="section-header__info">
+            <h2 class="section-header__title">Mi Perfil</h2>
+            <p class="section-header__sub">Gestiona tu información personal</p>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="profile-avatar" data-auth="avatar">O</div>
+          <div class="profile-info">
+            <div class="profile-info__name" data-auth="nombre">Operador</div>
+            <div class="profile-info__email" data-auth="email"></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="card">
+            <div class="card__header"><span class="card__title">✏️ Editar Datos Personales</span></div>
+            <div class="card__body">
+              <div class="alert" id="perfilAlert" hidden></div>
+              <form id="perfilForm" class="form-grid" novalidate>
+                <div class="form-group"><label class="form-label" for="pNombre">Nombre completo</label><input class="form-input" type="text" id="pNombre" name="nombre_completo"/></div>
+                <div class="form-group"><label class="form-label" for="pTelefono">Teléfono</label><input class="form-input" type="tel" id="pTelefono" name="telefono"/></div>
+                <div class="form-group"><label class="form-label" for="pCiNit">CI / NIT</label><input class="form-input" type="text" id="pCiNit" name="ci_nit"/></div>
+                <button type="submit" class="btn btn-primary">💾 Guardar</button>
+              </form>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__header"><span class="card__title">🔒 Cambiar Contraseña</span></div>
+            <div class="card__body">
+              <div class="alert" id="passAlert" hidden></div>
+              <form id="passForm" class="form-grid" novalidate>
+                <div class="form-group"><label class="form-label" for="passActual">Contraseña actual</label><input class="form-input" type="password" id="passActual" required/></div>
+                <div class="form-group"><label class="form-label" for="passNueva">Nueva contraseña</label><input class="form-input" type="password" id="passNueva" required/><span class="form-hint">Mín. 8 chars, 1 mayúscula, 1 número</span></div>
+                <div class="form-group"><label class="form-label" for="passConfirmar">Confirmar</label><input class="form-input" type="password" id="passConfirmar" required/></div>
+                <button type="submit" class="btn btn-primary">🔑 Cambiar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="../../shared/js/api.js"></script>
+<script>window.ROL_REQUERIDO = 'OPERADOR_ALMACEN';</script>
+<script src="../../shared/js/auth-guard.js"></script>
+<script>
+'use strict';
+function showAlert(id, msg, tipo='danger') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = `alert alert-${tipo}`;
+  el.textContent = msg;
+  el.hidden = false;
+  setTimeout(() => el.hidden = true, 5000);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const sesion = API.obtenerSesion();
+  const usuario = sesion?.usuario;
+
+  // Cargar info del almacén asignado
+  if (usuario?.almacen_id) {
+    try {
+      const r = await API.obtenerAlmacen(usuario.almacen_id);
+      const a = r.almacen;
+      document.getElementById('almacenTitulo').textContent   = a.nombre;
+      document.getElementById('almacenSubtitulo').textContent = `${a.ciudad} · ${a.tipo}`;
+      document.getElementById('topbarTitle').textContent     = `Panel ${a.nombre}`;
+      document.getElementById('almNombre').textContent    = a.nombre;
+      document.getElementById('almCiudad').textContent    = a.ciudad;
+      document.getElementById('almTipo').textContent      = a.tipo;
+      document.getElementById('almDireccion').textContent = a.direccion || '—';
+    } catch { /* silencioso */ }
+  } else {
+    document.getElementById('almacenSubtitulo').textContent = 'Sin almacén asignado';
+  }
+
+  // Cargar perfil
+  try {
+    const r = await API.getMe();
+    const u = r.usuario;
+    document.getElementById('pNombre').value   = u.nombre_completo || '';
+    document.getElementById('pTelefono').value = u.telefono || '';
+    document.getElementById('pCiNit').value    = u.ci_nit || '';
+  } catch { /* silencioso */ }
+});
+
+document.getElementById('perfilForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.submitter; btn.disabled = true;
+  try {
+    await API.updatePerfil({ nombre_completo: document.getElementById('pNombre').value.trim(), telefono: document.getElementById('pTelefono').value.trim(), ci_nit: document.getElementById('pCiNit').value.trim() });
+    showAlert('perfilAlert', '✅ Perfil actualizado.', 'success');
+  } catch (err) { showAlert('perfilAlert', '❌ ' + (err?.data?.mensaje || err.message)); }
+  finally { btn.disabled = false; }
+});
+
+document.getElementById('passForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.submitter; btn.disabled = true;
+  try {
+    await API.cambiarPassword({ password_actual: document.getElementById('passActual').value, password_nueva: document.getElementById('passNueva').value, password_confirmar: document.getElementById('passConfirmar').value });
+    showAlert('passAlert', '✅ Contraseña cambiada. Redirigiendo...', 'success');
+    document.getElementById('passForm').reset();
+    setTimeout(() => API.cerrarSesion(), 2000);
+  } catch (err) { showAlert('passAlert', '❌ ' + (err?.data?.mensaje || err.message)); }
+  finally { btn.disabled = false; }
+});
+</script>
+</body>
+</html>

@@ -929,10 +929,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initTrackingWidget();    // 10. Simulador de rastreo de pedidos
   initB2BForm();           // 11. Formulario corporativo B2B
   initContactForm();       // 12. Formulario de contacto general
+  initAuth();              // 14. Autenticación, sesión y modales (Fase 2)
 
-  // Toast de bienvenida
+  // Toast de bienvenida (solo si no hay sesión abierta previa)
   setTimeout(() => {
-    showToast('🍫 ¡Bienvenido a ChocoTi-Digital! El sabor de Sucre en tu pantalla.', 'success', 4000);
+    if (typeof API !== 'undefined' && !API.estaAutenticado()) {
+      showToast('🍫 ¡Bienvenido a ChocoTi-Digital! El sabor de Sucre en tu pantalla.', 'success', 4000);
+    }
   }, 1000);
 
   // Inicializar iconos nuevamente tras cualquier inyección dinámica tardía
@@ -940,3 +943,408 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.info('🍫 ChocoTi-Digital iniciado correctamente — Chocolates Para Ti, Sucre Bolivia.');
 });
+
+/* ============================================================
+   14. AUTENTICACIÓN, SESIÓN OMNICANAL Y PERFIL (FASE 2)
+   ============================================================ */
+
+function initAuth() {
+  if (typeof API === 'undefined') {
+    console.warn('[AUTH] Módulo API no detectado.');
+    return;
+  }
+
+  // Elementos DOM del Header y Dropdown
+  const headerAuthWrap   = document.getElementById('headerAuthWrap');
+  const headerAuthBtn    = document.getElementById('headerAuthBtn');
+  const headerAuthText   = document.getElementById('headerAuthText');
+  const userDropdownMenu = document.getElementById('userDropdownMenu');
+  const userDropdownName = document.getElementById('userDropdownName');
+  const userDropdownBadge= document.getElementById('userDropdownBadge');
+  const userDropdownEmail= document.getElementById('userDropdownEmail');
+  const btnIrDashboard   = document.getElementById('btnIrDashboard');
+  const btnAbrirPerfil   = document.getElementById('btnAbrirPerfil');
+  const btnCerrarSesion  = document.getElementById('btnCerrarSesion');
+
+  // Elementos del Banner de Bienvenida
+  const roleWelcomeBanner = document.getElementById('roleWelcomeBanner');
+  const bannerUserName    = document.getElementById('bannerUserName');
+  const bannerUserBadge   = document.getElementById('bannerUserBadge');
+  const bannerDashLink    = document.getElementById('bannerDashLink');
+  const btnBannerClose    = document.getElementById('btnBannerClose');
+
+  // Elementos del Modal de Login
+  const loginModal        = document.getElementById('loginModal');
+  const loginModalClose   = document.getElementById('loginModalClose');
+  const loginModalForm    = document.getElementById('loginModalForm');
+  const loginEmail        = document.getElementById('loginEmail');
+  const loginPassword     = document.getElementById('loginPassword');
+  const toggleModalPass   = document.getElementById('toggleModalPass');
+  const loginModalAlert   = document.getElementById('loginModalAlert');
+  const loginModalAlertText = document.getElementById('loginModalAlertText');
+  const loginModalSubmit  = document.getElementById('loginModalSubmit');
+  const loginSubmitText   = document.getElementById('loginSubmitText');
+  const chkAutoRedirect   = document.getElementById('chkAutoRedirect');
+
+  // Elementos del Modal de Perfil
+  const profileModal      = document.getElementById('profileModal');
+  const profileModalClose = document.getElementById('profileModalClose');
+  const profileModalAlert = document.getElementById('profileModalAlert');
+  const profileModalAlertText = document.getElementById('profileModalAlertText');
+  const modalUserAvatar   = document.getElementById('modalUserAvatar');
+  const profileModalTitle = document.getElementById('profileModalTitle');
+  const modalUserRole     = document.getElementById('modalUserRole');
+  const tabPaneDatos      = document.getElementById('tabPaneDatos');
+  const tabPaneClave      = document.getElementById('tabPaneClave');
+  const perfilDatosForm   = document.getElementById('perfilDatosForm');
+  const perfilClaveForm   = document.getElementById('perfilClaveForm');
+
+  // Campos de perfil
+  const profNombre        = document.getElementById('profNombre');
+  const profEmail         = document.getElementById('profEmail');
+  const profTelefono      = document.getElementById('profTelefono');
+  const profCiNit         = document.getElementById('profCiNit');
+  const profRazonSocial   = document.getElementById('profRazonSocial');
+  const profGroupRazonSocial = document.getElementById('profGroupRazonSocial');
+
+  // ── 1. Actualizar UI según estado de sesión ──
+  function updateAuthUI() {
+    const sesion = API.obtenerSesion();
+
+    if (sesion && sesion.usuario) {
+      const u = sesion.usuario;
+      const primerNombre = (u.nombre_completo || 'Usuario').split(' ')[0];
+      const inicial = (u.nombre_completo || 'U').charAt(0).toUpperCase();
+
+      // Header button
+      headerAuthBtn.classList.add('logged-in');
+      headerAuthText.innerHTML = `<span class="header-auth-avatar">${inicial}</span> ${primerNombre}`;
+      headerAuthBtn.setAttribute('title', `${u.nombre_completo} (${u.rol})`);
+
+      // Dropdown
+      if (userDropdownName) userDropdownName.textContent = u.nombre_completo;
+      if (userDropdownBadge) userDropdownBadge.textContent = u.rol;
+      if (userDropdownEmail) userDropdownEmail.textContent = u.email;
+
+      // Banner de bienvenida
+      if (roleWelcomeBanner) {
+        roleWelcomeBanner.hidden = false;
+        if (bannerUserName) bannerUserName.textContent = u.nombre_completo;
+        if (bannerUserBadge) bannerUserBadge.textContent = u.rol;
+        if (bannerDashLink) {
+          bannerDashLink.href = API.resolverRutaDashboard(u.rol);
+        }
+      }
+    } else {
+      // Estado invitado / sin sesión
+      headerAuthBtn.classList.remove('logged-in');
+      headerAuthText.textContent = 'Ingresar';
+      headerAuthBtn.removeAttribute('title');
+      if (userDropdownMenu) userDropdownMenu.hidden = true;
+      if (roleWelcomeBanner) roleWelcomeBanner.hidden = true;
+    }
+  }
+
+  // ── 2. Click en botón de Header ──
+  if (headerAuthBtn) {
+    headerAuthBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (API.estaAutenticado()) {
+        userDropdownMenu.hidden = !userDropdownMenu.hidden;
+      } else {
+        abrirLoginModal();
+      }
+    });
+  }
+
+  // Cerrar dropdown al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (userDropdownMenu && !userDropdownMenu.hidden && !headerAuthWrap.contains(e.target)) {
+      userDropdownMenu.hidden = true;
+    }
+  });
+
+  // Cerrar banner de bienvenida
+  if (btnBannerClose) {
+    btnBannerClose.addEventListener('click', () => {
+      roleWelcomeBanner.hidden = true;
+    });
+  }
+
+  // ── 3. Acciones del Dropdown ──
+  if (btnIrDashboard) {
+    btnIrDashboard.addEventListener('click', (e) => {
+      e.preventDefault();
+      const sesion = API.obtenerSesion();
+      if (sesion?.usuario?.rol) {
+        window.location.href = API.resolverRutaDashboard(sesion.usuario.rol);
+      }
+    });
+  }
+
+  if (btnAbrirPerfil) {
+    btnAbrirPerfil.addEventListener('click', () => {
+      userDropdownMenu.hidden = true;
+      abrirProfileModal();
+    });
+  }
+
+  if (btnCerrarSesion) {
+    btnCerrarSesion.addEventListener('click', () => {
+      userDropdownMenu.hidden = true;
+      if (confirm('¿Deseas cerrar tu sesión actual en ChocoTi-Digital?')) {
+        localStorage.removeItem('chocoti_token');
+        localStorage.removeItem('chocoti_usuario');
+        updateAuthUI();
+        showToast('🚪 Has cerrado sesión correctamente.', 'info', 3500);
+      }
+    });
+  }
+
+  // ── 4. Control del Modal de Login ──
+  function abrirLoginModal() {
+    loginModalAlert.hidden = true;
+    loginModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    initIcons();
+    setTimeout(() => loginEmail.focus(), 150);
+  }
+
+  function cerrarLoginModal() {
+    loginModal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  if (loginModalClose) {
+    loginModalClose.addEventListener('click', cerrarLoginModal);
+  }
+
+  loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) cerrarLoginModal();
+  });
+
+  // Toggle mostrar contraseña en modal
+  if (toggleModalPass) {
+    toggleModalPass.addEventListener('click', () => {
+      const isPass = loginPassword.type === 'password';
+      loginPassword.type = isPass ? 'text' : 'password';
+      toggleModalPass.textContent = isPass ? '🙈' : '👁️';
+    });
+  }
+
+  // Selector de credenciales rápidas
+  document.querySelectorAll('.cred-pill').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.cred-pill').forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      loginEmail.value = pill.dataset.email;
+      loginPassword.value = pill.dataset.pass;
+      loginModalAlert.hidden = true;
+
+      showToast(`⚡ Credenciales cargadas: ${pill.dataset.role}`, 'info', 2000);
+    });
+  });
+
+  // Envío del formulario de Login
+  if (loginModalForm) {
+    loginModalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginModalAlert.hidden = true;
+
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+
+      if (!email || !password) {
+        mostrarAlertaLogin('Por favor completa todos los campos.');
+        return;
+      }
+
+      // Estado cargando
+      loginModalSubmit.disabled = true;
+      loginSubmitText.textContent = 'Verificando credenciales...';
+
+      try {
+        const respuesta = await API.login(email, password);
+
+        // Guardar token y usuario
+        API.guardarSesion(respuesta.token, respuesta.usuario);
+
+        // Actualizar UI en vivo
+        updateAuthUI();
+        cerrarLoginModal();
+
+        showToast(`🍫 ¡Bienvenido/a, ${respuesta.usuario.nombre_completo}!`, 'success', 4000);
+
+        // Redirección si está marcada o si es ADMIN / OPERADOR
+        const debeRedirigir = chkAutoRedirect?.checked || ['ADMINISTRADOR', 'OPERADOR_ALMACEN'].includes(respuesta.usuario.rol);
+
+        if (debeRedirigir) {
+          const ruta = API.resolverRutaDashboard(respuesta.usuario.rol);
+          showToast(`🚀 Abriendo Panel de ${respuesta.usuario.rol}...`, 'info', 2000);
+          setTimeout(() => {
+            window.location.href = ruta;
+          }, 1200);
+        }
+      } catch (err) {
+        const mensajeError = err?.data?.mensaje || err.message || 'Error de conexión con el servidor.';
+        mostrarAlertaLogin(mensajeError);
+      } finally {
+        loginModalSubmit.disabled = false;
+        loginSubmitText.textContent = 'Acceder a ChocoTi-Digital';
+        initIcons();
+      }
+    });
+  }
+
+  function mostrarAlertaLogin(msg) {
+    loginModalAlertText.textContent = msg;
+    loginModalAlert.hidden = false;
+  }
+
+  // ── 5. Control del Modal de Perfil y Clave ──
+  async function abrirProfileModal() {
+    profileModalAlert.hidden = true;
+    profileModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    initIcons();
+
+    // Reset tabs
+    activarTabPerfil('datos');
+
+    // Cargar datos actuales
+    try {
+      const res = await API.getMe();
+      const u = res.usuario;
+
+      modalUserAvatar.textContent = (u.nombre_completo || 'U').charAt(0).toUpperCase();
+      profileModalTitle.textContent = u.nombre_completo;
+      modalUserRole.textContent = `${u.rol} ${u.almacen_nombre ? '· ' + u.almacen_nombre : ''}`;
+
+      profNombre.value = u.nombre_completo || '';
+      profEmail.value = u.email || '';
+      profTelefono.value = u.telefono || '';
+      profCiNit.value = u.ci_nit || '';
+
+      if (u.tipo_cliente === 'CORPORATIVO') {
+        profGroupRazonSocial.style.display = 'block';
+        profRazonSocial.value = u.razon_social || '';
+      } else {
+        profGroupRazonSocial.style.display = 'none';
+      }
+    } catch (err) {
+      const sesion = API.obtenerSesion();
+      if (sesion?.usuario) {
+        const u = sesion.usuario;
+        profNombre.value = u.nombre_completo || '';
+        profEmail.value = u.email || '';
+      }
+    }
+  }
+
+  function cerrarProfileModal() {
+    profileModal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  if (profileModalClose) {
+    profileModalClose.addEventListener('click', cerrarProfileModal);
+  }
+
+  profileModal.addEventListener('click', (e) => {
+    if (e.target === profileModal) cerrarProfileModal();
+  });
+
+  // Cambio de pestañas
+  function activarTabPerfil(tabName) {
+    document.querySelectorAll('.profile-tab-btn').forEach((b) => {
+      b.classList.toggle('active', b.dataset.profileTab === tabName);
+    });
+    tabPaneDatos.hidden = tabName !== 'datos';
+    tabPaneClave.hidden = tabName !== 'clave';
+    profileModalAlert.hidden = true;
+    initIcons();
+  }
+
+  document.querySelectorAll('.profile-tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activarTabPerfil(btn.dataset.profileTab);
+    });
+  });
+
+  // Guardar Datos Personales
+  if (perfilDatosForm) {
+    perfilDatosForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      profileModalAlert.hidden = true;
+
+      const payload = {
+        nombre_completo: profNombre.value.trim(),
+        telefono: profTelefono.value.trim(),
+        ci_nit: profCiNit.value.trim(),
+        razon_social: profRazonSocial ? profRazonSocial.value.trim() : undefined,
+      };
+
+      try {
+        const res = await API.updatePerfil(payload);
+        mostrarAlertaPerfil('✅ Perfil actualizado exitosamente.', 'success');
+
+        // Actualizar datos de sesión local
+        const sesion = API.obtenerSesion();
+        if (sesion) {
+          sesion.usuario = { ...sesion.usuario, ...res.usuario };
+          API.guardarSesion(sesion.token, sesion.usuario);
+          updateAuthUI();
+        }
+        showToast('✅ Perfil guardado con éxito.', 'success', 3000);
+      } catch (err) {
+        mostrarAlertaPerfil('❌ ' + (err?.data?.mensaje || err.message), 'danger');
+      }
+    });
+  }
+
+  // Cambiar Contraseña
+  if (perfilClaveForm) {
+    perfilClaveForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      profileModalAlert.hidden = true;
+
+      const passActual = document.getElementById('passActual').value;
+      const passNueva = document.getElementById('passNueva').value;
+      const passConfirmar = document.getElementById('passConfirmar').value;
+
+      if (!passActual || !passNueva || !passConfirmar) {
+        mostrarAlertaPerfil('Por favor completa todos los campos de contraseña.', 'danger');
+        return;
+      }
+
+      if (passNueva !== passConfirmar) {
+        mostrarAlertaPerfil('La nueva contraseña y su confirmación no coinciden.', 'danger');
+        return;
+      }
+
+      try {
+        const res = await API.cambiarPassword({
+          password_actual: passActual,
+          password_nueva: passNueva,
+          password_confirmar: passConfirmar,
+        });
+
+        mostrarAlertaPerfil('✅ ' + (res.mensaje || 'Contraseña cambiada con éxito.'), 'success');
+        perfilClaveForm.reset();
+        showToast('🔑 Contraseña actualizada exitosamente.', 'success', 3500);
+      } catch (err) {
+        mostrarAlertaPerfil('❌ ' + (err?.data?.mensaje || err.message), 'danger');
+      }
+    });
+  }
+
+  function mostrarAlertaPerfil(msg, tipo = 'danger') {
+    profileModalAlert.className = `auth-alert auth-alert--${tipo}`;
+    profileModalAlertText.textContent = msg;
+    profileModalAlert.hidden = false;
+  }
+
+  // Inicializar estado al cargar
+  updateAuthUI();
+}
