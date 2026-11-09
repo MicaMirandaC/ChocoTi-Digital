@@ -47,6 +47,15 @@ app.use(
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: false }));
 
+// Servir archivos estáticos de la raíz del proyecto (donde está index.html)
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../../')));
+
+// Ruta principal para cargar el index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../index.html'));
+});
+
 // Rate Limiting general y para autenticación
 const limiterGlobal = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
