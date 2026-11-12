@@ -9,7 +9,7 @@
 'use strict';
 
 /* ── Configuración base ── */
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = 'https://chocoti-digital.onrender.com/api/api';
 const STORAGE_KEY_TOKEN   = 'chocoti_token';
 const STORAGE_KEY_USUARIO = 'chocoti_usuario';
 

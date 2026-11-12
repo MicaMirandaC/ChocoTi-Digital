@@ -85,8 +85,8 @@ El sistema incluye cuentas semilla listas para usar en cada rol:
    # o en modo desarrollo con nodemon:
    npm run dev
    ```
-   El servidor responderá en: **`http://localhost:3001`**  
-   Verificación de salud: `GET http://localhost:3001/api/health`
+   El servidor responderá en: **`https://chocoti-digital.onrender.com/api`**  
+   Verificación de salud: `GET https://chocoti-digital.onrender.com/api/api/health`
 
 ---
 
@@ -115,7 +115,7 @@ Puedes servir el frontend mediante cualquiera de estas opciones:
 
 ## 📡 4. Catálogo de Endpoints de la API REST
 
-**Base URL:** `http://localhost:3001/api`
+**Base URL:** `https://chocoti-digital.onrender.com/api/api`
 
 ### 4.1 Autenticación y Perfil (`/api/auth`)
 * `POST /api/auth/login`: Autentica con `{ email, password }`. Genera JWT y registra intento obligatorio en `logs_acceso`.
